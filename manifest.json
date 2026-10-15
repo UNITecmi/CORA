@@ -1,0 +1,10 @@
+{
+  "name": "CORA – Comunicación y Orientación Intercultural",
+  "short_name": "CORA",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#f7f1e4",
+  "theme_color": "#c8664a",
+  "lang": "es",
+  "icons": [{"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}]
+}

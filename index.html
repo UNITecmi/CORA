@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>CORA</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c8664a">
+<link rel="icon" href="icon.svg">
+<style>
+:root{--bg:#f7f1e4;--card:#fffaf0;--ink:#3a2a22;--mute:#7a6a5f;--line:#e4d8c3;--terra:#c8664a;--teal:#4a8588;--mustard:#d4a24c;--char:#555;--green:#5b8f68;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#241c18;--card:#32271f;--ink:#f5ebdc;--mute:#bba995;--line:#4a3b30}}
+:root[data-theme="dark"]{--bg:#241c18;--card:#32271f;--ink:#f5ebdc;--mute:#bba995;--line:#4a3b30}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito","Segoe UI",system-ui,sans-serif}
+main{max-width:480px;margin:0 auto;padding:16px 16px 40px}
+h1{font-size:44px;margin:0;line-height:1;letter-spacing:-1px}
+h2{font-size:20px;text-align:center;margin:22px 0 12px}
+button{font:inherit;cursor:pointer;border:0;color:inherit}
+button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
+.top p{margin:4px 0 0;font-size:14px;color:var(--mute);max-width:150px}
+.mascot{display:flex;align-items:flex-end;gap:6px}
+.bubble{background:var(--line);border-radius:14px;padding:8px 10px;font-size:14px;max-width:130px}
+.mascot span.dog{font-size:54px;line-height:1}
+.lang{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:2px solid var(--line);border-radius:30px;padding:10px 18px;margin-top:14px;font-weight:800;font-size:19px}
+.lang button{background:none;font-size:22px;padding:4px 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tool{min-height:112px;border-radius:20px;color:#fff;font-weight:800;font-size:17px;text-align:left;padding:14px;display:flex;flex-direction:column;justify-content:space-between}
+.tool i{font-style:normal;font-size:30px}
+.t1{background:var(--terra)}.t2{background:var(--teal)}.t3{background:var(--char)}.t4{background:var(--mustard);color:#2d2112}
+.path{display:flex;gap:10px;overflow-x:auto;padding:4px 2px 10px}
+.lvl{flex:0 0 120px;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px;text-align:center}
+.lvl b{display:block;font-size:15px}.lvl small{color:var(--mute)}
+.lvl.done{border-color:var(--green)}.lvl.lock{opacity:.55}
+.bar{height:8px;background:var(--line);border-radius:6px;margin-top:8px;overflow:hidden}.bar div{height:100%;background:var(--teal)}
+.hdr{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.back{background:var(--card);border:2px solid var(--line);border-radius:50%;width:44px;height:44px;font-size:20px}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:6px 0 12px}
+.chip{background:var(--card);border:2px solid var(--line);border-radius:22px;padding:10px 16px;font-weight:700;white-space:nowrap}
+.chip[aria-pressed="true"]{background:var(--terra);color:#fff;border-color:var(--terra)}
+.phrase{display:flex;gap:10px;align-items:stretch;margin-bottom:10px}
+.phrase .main{flex:1;text-align:left;background:var(--card);border:2px solid var(--line);border-radius:18px;padding:14px}
+.phrase .main b{display:block;font-size:18px}
+.phrase .main span{display:block;margin-top:4px;color:var(--mute);font-size:15px}
+.pend{display:inline-block;margin-top:6px;font-size:12px;background:var(--mustard);color:#2d2112;border-radius:10px;padding:2px 8px;font-weight:700}
+.spk{width:60px;border-radius:18px;background:var(--teal);color:#fff;font-size:24px}
+.note{font-size:13px;color:var(--mute);text-align:center;margin-top:18px;line-height:1.4}
+#big{position:fixed;inset:0;background:var(--terra);color:#fff;display:none;flex-direction:column;justify-content:center;align-items:center;text-align:center;padding:24px;z-index:9}
+#big.on{display:flex}
+#big p{font-size:clamp(30px,9vw,52px);font-weight:800;line-height:1.15;margin:0 0 14px}
+#big small{font-size:22px;opacity:.9}
+#big button{margin-top:30px;background:#fff;color:var(--ink);border-radius:30px;padding:14px 28px;font-weight:800;font-size:18px}
+#toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+.hide{display:none}
+.vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.vc{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px 4px;text-align:center;font-weight:800;font-size:15px}
+.vc i{display:block;font-style:normal;font-size:34px;margin-bottom:4px}
+.vc small{display:block;font-weight:600;font-size:11px;color:var(--mute);margin-top:4px}
+.t5{background:var(--green)}
+</style>
+</head>
+<body>
+<main>
+
+<section id="home">
+  <div class="top">
+    <div><h1>CORA</h1><p>Comunicación y Orientación Intercultural</p></div>
+    <div class="mascot"><div class="bubble">¡Hola! ¿Cómo te ayudo hoy?</div><span class="dog" aria-hidden="true">🐕</span></div>
+  </div>
+
+  <div class="lang" role="group" aria-label="Idiomas">
+    <span id="from">Español</span>
+    <button id="swap" aria-label="Invertir idiomas">⇄</button>
+    <span id="to">Náhuatl</span>
+  </div>
+
+  <h2>Herramientas rápidas</h2>
+  <div class="grid">
+    <button class="tool t1" data-go="phrases"><i>🎙️</i>Frases de salud</button>
+    <button class="tool t2" data-soon><i>📷</i>Traducir con cámara</button>
+    <button class="tool t3" data-soon><i>💬</i>Asistente Corito</button>
+    <button class="tool t4" data-go="tramites"><i>📄</i>Trámites y salud</button>
+  </div>
+
+  <button class="tool t5" data-go="vocab" style="width:100%;margin-top:12px;min-height:72px;flex-direction:row;align-items:center"><i>🫀</i>Vocabulario: partes del cuerpo</button>
+  <p class="note" id="net"></p>
+
+  <h2>Ruta de aprendizaje</h2>
+  <div class="path" id="path"></div>
+</section>
+
+<section id="phrases" class="hide">
+  <div class="hdr"><button class="back" data-go="home" aria-label="Volver">←</button><h1 style="font-size:26px">Frases de salud</h1></div>
+  <div class="chips" id="chips" role="group" aria-label="Categorías"></div>
+  <div id="list"></div>
+  <p class="note">Toca la frase para mostrarla en letra grande. Toca 🔊 para escucharla.<br>Las frases en náhuatl solo se muestran cuando un hablante las ha validado.</p>
+</section>
+
+<section id="tramites" class="hide">
+  <div class="hdr"><button class="back" data-go="home" aria-label="Volver">←</button><h1 style="font-size:26px">Trámites y salud</h1></div>
+  <div id="docs"></div>
+  <p class="note">Lista de apoyo. Confirma requisitos con la clínica o en las fuentes oficiales. CORA no diagnostica ni sustituye al personal de salud.</p>
+</section>
+
+<section id="vocab" class="hide">
+  <div class="hdr"><button class="back" data-go="home" aria-label="Volver">←</button><h1 style="font-size:26px">Partes del cuerpo</h1></div>
+  <div class="vgrid" id="vgrid"></div>
+  <p class="note">Toca una palabra para escucharla y verla en letra grande. Úsala junto con "Me duele..." para señalar dónde está el dolor.</p>
+</section>
+
+</main>
+
+<div id="big" role="dialog" aria-modal="true"><p id="bigEs"></p><small id="bigNah"></small><button id="bigClose">Cerrar</button></div>
+<div id="toast" role="status"></div>
+
+<script>
+/* ===== CONTENIDO =====
+   nah: texto en náhuatl. Déjalo en null hasta que un hablante lo valide.
+   audio: ruta a la grabación del hablante (ej. "audio/nah/duele-cabeza.mp3").
+   variante: indica de qué región es la traducción validada. */
+const FRASES = {
+  "Ayuda": [
+    {es:"Necesito ayuda", nah:null, audio:null},
+    {es:"No entiendo", nah:null, audio:null},
+    {es:"Hable más despacio, por favor", nah:null, audio:null},
+    {es:"Necesito un intérprete", nah:null, audio:null}
+  ],
+  "Dolor": [
+    {es:"Me duele la cabeza", nah:null, audio:null},
+    {es:"Me duele el estómago", nah:null, audio:null},
+    {es:"Me duele aquí", nah:null, audio:null},
+    {es:"Tengo fiebre", nah:null, audio:null},
+    {es:"Tengo mucho tiempo con este dolor", nah:null, audio:null}
+  ],
+  "Consulta": [
+    {es:"Quiero una consulta", nah:null, audio:null},
+    {es:"Vengo a una cita", nah:null, audio:null},
+    {es:"Estoy embarazada", nah:null, audio:null},
+    {es:"Vengo con mi hijo o hija", nah:null, audio:null},
+    {es:"Soy alérgico o alérgica a un medicamento", nah:null, audio:null}
+  ],
+  "Emergencia": [
+    {es:"Es una emergencia", nah:null, audio:null},
+    {es:"No puedo respirar", nah:null, audio:null},
+    {es:"Llamen a un médico", nah:null, audio:null}
+  ]
+};
+
+const DOCS = [
+  "Identificación oficial (INE o equivalente)",
+  "CURP",
+  "Cartilla de vacunación o de salud",
+  "Receta o estudios anteriores, si los hay",
+  "Medicamentos que toma actualmente",
+  "Número de un familiar o contacto de confianza"
+];
+
+/* Palabras de la ruta de aprendizaje: también requieren validación */
+const NIVELES = [
+  {t:"Nivel 1: Saludos", p:100},
+  {t:"Nivel 2: Comunidad", p:45},
+  {t:"Nivel 3: Salud", p:0, lock:true}
+];
+
+/* ===== UI ===== */
+const $ = s => document.querySelector(s);
+let dirEsToNah = true, cat = "Ayuda";
+
+function show(id){
+  ["home","phrases","tramites","vocab"].forEach(x => $("#"+x).classList.toggle("hide", x!==id));
+  window.scrollTo(0,0);
+}
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("on");
+  setTimeout(()=>t.classList.remove("on"), 2200);
+}
+
+document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => show(b.dataset.go));
+document.querySelectorAll("[data-soon]").forEach(b => b.onclick = () => toast("Próximamente"));
+
+$("#swap").onclick = () => {
+  dirEsToNah = !dirEsToNah;
+  $("#from").textContent = dirEsToNah ? "Español" : "Náhuatl";
+  $("#to").textContent = dirEsToNah ? "Náhuatl" : "Español";
+};
+
+/* Ruta de aprendizaje */
+$("#path").innerHTML = NIVELES.map(n =>
+  `<div class="lvl ${n.p===100?"done":""} ${n.lock?"lock":""}">
+     <div style="font-size:26px">${n.lock?"🔒":n.p===100?"⭐":"🌱"}</div>
+     <b>${n.t}</b><small>${n.lock?"Bloqueado":n.p+"%"}</small>
+     <div class="bar"><div style="width:${n.p}%"></div></div>
+   </div>`).join("");
+
+/* Categorías y frases */
+function renderChips(){
+  $("#chips").innerHTML = Object.keys(FRASES).map(c =>
+    `<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
+  $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => { cat = b.dataset.c; renderChips(); renderList(); });
+}
+function renderList(){
+  $("#list").innerHTML = FRASES[cat].map((f,i) =>
+    `<div class="phrase">
+       <button class="main" data-i="${i}">
+         <b>${f.es}</b>
+         ${f.nah ? `<span>${f.nah}</span>` : `<span class="pend">Náhuatl pendiente de validar</span>`}
+       </button>
+       <button class="spk" data-s="${i}" aria-label="Escuchar: ${f.es}">🔊</button>
+     </div>`).join("");
+  $("#list").querySelectorAll(".main").forEach(b => b.onclick = () => openBig(FRASES[cat][b.dataset.i]));
+  $("#list").querySelectorAll(".spk").forEach(b => b.onclick = () => speak(FRASES[cat][b.dataset.s]));
+}
+
+/* Audio: usa la grabación del hablante si existe; si no, voz en español */
+function speak(f){
+  if (f.audio) { new Audio(f.audio).play().catch(()=>toast("No se encontró el audio")); return; }
+  if (!("speechSynthesis" in window)) return toast("Tu dispositivo no tiene voz");
+  speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(f.es); u.lang = "es-MX"; u.rate = .9;
+  speechSynthesis.speak(u);
+}
+function openBig(f){
+  $("#bigEs").textContent = f.es;
+  $("#bigNah").textContent = f.nah || "";
+  $("#big").classList.add("on");
+  $("#bigClose").focus();
+}
+$("#bigClose").onclick = () => $("#big").classList.remove("on");
+
+/* Trámites */
+$("#docs").innerHTML = DOCS.map((d,i) =>
+  `<label class="phrase"><span class="main" style="display:flex;gap:12px;align-items:center">
+     <input type="checkbox" style="width:24px;height:24px"><b style="font-size:16px">${d}</b></span></label>`).join("");
+
+/* ===== VOCABULARIO: partes del cuerpo =====
+   Igual que las frases: nah/audio se llenan cuando un hablante los valide. */
+const VOCAB = [
+  {ico:"🙂",es:"Cabeza"},{ico:"👁️",es:"Ojos"},{ico:"👂",es:"Oídos"},
+  {ico:"👃",es:"Nariz"},{ico:"👄",es:"Boca"},{ico:"🦷",es:"Dientes"},
+  {ico:"🗣️",es:"Garganta"},{ico:"🧣",es:"Cuello"},{ico:"💪",es:"Brazo"},
+  {ico:"✋",es:"Mano"},{ico:"🫁",es:"Pecho"},{ico:"❤️",es:"Corazón"},
+  {ico:"🍽️",es:"Estómago"},{ico:"🔙",es:"Espalda"},{ico:"🦵",es:"Pierna"},
+  {ico:"🦴",es:"Rodilla"},{ico:"🦶",es:"Pie"},{ico:"🩸",es:"Sangre"}
+].map(v => ({...v, nah:null, audio:null}));
+$("#vgrid").innerHTML = VOCAB.map((v,i) =>
+  `<button class="vc" data-v="${i}" aria-label="${v.es}"><i>${v.ico}</i>${v.es}${v.nah?`<small>${v.nah}</small>`:`<small>por validar</small>`}</button>`).join("");
+$("#vgrid").querySelectorAll(".vc").forEach(b => b.onclick = () => { const v = VOCAB[b.dataset.v]; speak(v); openBig(v); });
+
+/* ===== MODO SIN INTERNET ===== */
+function netState(){
+  $("#net").textContent = navigator.onLine ? "" : "Sin internet: CORA sigue funcionando con el contenido guardado.";
+}
+addEventListener("online", netState); addEventListener("offline", netState); netState();
+try {
+  if ("serviceWorker" in navigator && /^https?:$/.test(location.protocol) && window.top === window.self) {
+    navigator.serviceWorker.register("sw.js").catch(()=>{});
+  }
+} catch(e) {}
+
+renderChips(); renderList();
+</script>
+</body>
+</html>
