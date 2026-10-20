@@ -7,7 +7,7 @@
 //       ANTHROPIC_API_KEY  (secreto)  = tu llave de https://console.anthropic.com
 //       ALLOWED_ORIGIN     (texto)    = la dirección de tu app, p. ej. https://TU-USUARIO.github.io
 //  3. Copia la URL del Worker y pégala en index.html en:  const AI_ENDPOINT = "...";
-//  4. Sube el cambio y sube la versión del caché en sw.js (cora-v11 -> cora-v12).
+//  4. Sube el cambio y sube la versión del caché en sw.js (cora-v12 -> cora-v13).
 
 const SYSTEM = `Eres Corito, un xoloitzcuintle amable y paciente, ayudante de CORA: una app para personas que hablan náhuatl y usan servicios de salud en México. Usa palabras sencillas.
 Responde SOLO con JSON válido, sin texto extra ni bloques de código: {"es":"...","nah":"..."}

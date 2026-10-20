@@ -276,7 +276,7 @@ const UI = {
   n_phr:"Toca la frase para mostrarla en letra grande. Toca 🔊 para escucharla.",
   n_tra:"Lista de apoyo. Confirma requisitos con la clínica o en fuentes oficiales. CORA no diagnostica ni sustituye al personal de salud.",
   n_voc:"Toca una palabra para escucharla y verla en letra grande.",
-  n_cam:"Toca la foto para ampliarla. Con IA puedes leerla y traducirla (necesita internet).",
+  n_cam:"Toca la foto para ampliarla. Con IA puedes leerla y traducirla (necesita internet).",n_cam0:"Toca la foto para ampliarla.",
   n_asi:"El micrófono necesita internet en la mayoría de teléfonos. Sin conexión, escribe tu mensaje.",
   n_les:"Palabras en borrador: pueden cambiar cuando las valide un hablante.",
   offline:"Sin internet: CORA sigue funcionando con el contenido guardado.",
@@ -546,6 +546,14 @@ async function getSample(){
   try { _sample = (window.claude && claude.use) ? await claude.use("sample") : null; } catch(e) { _sample = null; }
   return _sample;
 }
+/* Los botones de IA solo aparecen si la IA está disponible (Worker configurado o vista previa de Claude) */
+function aiOn(){ return !!(AI_ENDPOINT || _sample); }
+function updateAI(){
+  const on = aiOn();
+  ["#aiAsk","#aiPhoto"].forEach(q => { const b = $(q); if (b) b.classList.toggle("hide", !on); });
+  const n = document.querySelector("#camera .note"); if (n) n.textContent = on ? t("n_cam") : t("n_cam0");
+}
+getSample().then(updateAI);
 function b64Blob(b64){
   const bin = atob(b64), u = new Uint8Array(bin.length);
   for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
@@ -628,7 +636,7 @@ function applyLang(){
   $("#q").placeholder = t("ph"); $("#micl").textContent = t("mic");
   $("#draft").textContent = t("draftnote"); $("#draft").classList.toggle("hide", !t("draftnote"));
   $("#res").innerHTML = "";
-  renderChips(); renderList(); renderDocs(); renderVocab(); renderPath(); showTip(); netState();
+  renderChips(); renderList(); renderDocs(); renderVocab(); renderPath(); showTip(); netState(); updateAI();
 }
 function setLang(l){
   lang = l; dirEsToNah = l === "es";
