@@ -530,7 +530,7 @@ $("#shot").onclick = () => { const im = $("#shot"); im.style.width = im.style.wi
 /* ===== IA (opcional, necesita internet) =====
    La llave de la IA NUNCA va en la app. Se usa un puente (Worker) que la guarda en secreto.
    Pega aquí la URL de tu Worker, por ejemplo "https://cora-ia.TU-USUARIO.workers.dev" */
-const AI_ENDPOINT = "";
+const AI_ENDPOINT = "https://cora-ia.kjchora.workers.dev/";
 const esc = x => String(x).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const AI_SYSTEM = `Eres Corito, un xoloitzcuintle amable y paciente, ayudante de CORA: una app para personas que hablan náhuatl y usan servicios de salud en México. Usa palabras sencillas.
 Responde SOLO con JSON válido, sin texto extra ni bloques de código: {"es":"...","nah":"..."}
