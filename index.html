@@ -21,8 +21,8 @@ button{font:inherit;cursor:pointer;border:0;color:inherit}
 button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 .top{display:flex;justify-content:space-between;align-items:flex-end;gap:10px}
 .top p{margin:4px 0 0;font-size:14px;color:var(--mute);max-width:150px}
-.mascot{display:flex;align-items:flex-end;gap:6px}
-.bubble{background:var(--line);border-radius:14px;padding:8px 10px;font-size:14px;max-width:130px}
+.mascot{display:flex;align-items:flex-end;gap:6px;min-width:0}
+.bubble{background:var(--line);border-radius:14px;padding:7px 8px;font-size:12.5px;max-width:130px;min-width:0;overflow-wrap:anywhere}
 .mascot span.dog{font-size:54px;line-height:1}
 .lang{display:flex;align-items:center;justify-content:space-between;background:var(--card);border:2px solid var(--line);border-radius:30px;padding:10px 18px;margin-top:14px;font-weight:800;font-size:19px}
 .lang button{background:none;font-size:22px;padding:4px 10px}
@@ -55,6 +55,22 @@ button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 #toast{position:fixed;left:50%;bottom:30px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:20px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.on{opacity:1}
 .hide{display:none}
+.lang{padding:6px;gap:6px}
+.lg{flex:1;padding:10px;border-radius:24px;background:none;font-weight:800;font-size:19px}
+.lg[aria-pressed="true"]{background:var(--terra);color:#fff}
+.brow{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#big small{display:block;margin-top:6px}
+input.q{flex:1;min-width:0;border:2px solid var(--line);border-radius:18px;padding:12px;font:inherit;background:var(--card);color:var(--ink)}
+.lvl{cursor:pointer;font:inherit;color:inherit}
+.dog{background:none;width:78px;padding:0;flex:0 0 auto;animation:bob 3s ease-in-out infinite}
+.dog svg{width:100%;display:block}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.blink{transform-box:fill-box;transform-origin:center;animation:blink 4.5s infinite}
+@keyframes blink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.wave{transform-origin:270px 870px;animation:wave 2.2s ease-in-out infinite}
+@keyframes wave{0%,100%{transform:rotate(0)}50%{transform:rotate(-9deg)}}
+.tool.rec{box-shadow:0 0 0 6px rgba(200,102,74,.4)}
+@media (prefers-reduced-motion:reduce){.dog,.blink,.wave{animation:none}}
 .vgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
 .vc{background:var(--card);border:2px solid var(--line);border-radius:18px;padding:12px 4px;text-align:center;font-weight:800;font-size:15px}
 .vc i{display:block;font-style:normal;font-size:34px;margin-bottom:4px}
@@ -68,20 +84,43 @@ button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 <section id="home">
   <div class="top">
     <div><h1>CORA</h1><p>Comunicación y Orientación Intercultural</p></div>
-    <div class="mascot"><div class="bubble">¡Hola! ¿Cómo te ayudo hoy?</div><span class="dog" aria-hidden="true">🐕</span></div>
+    <div class="mascot"><div class="bubble" id="tip" aria-live="polite">¡Hola! Soy Corito, tu xoloitzcuintle. ¿Cómo te ayudo hoy?</div><button class="dog" id="corito" aria-label="Corito, tu ayudante. Tócalo para escuchar un consejo"><svg viewBox="0 60 900 1150" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Corito, xoloitzcuintle">
+<path d="M650 1160 Q740 1215 800 1120" stroke="#5f5a58" stroke-width="36" fill="none" stroke-linecap="round"/>
+<path d="M255 800 Q245 1000 280 1190 L690 1190 Q650 1000 595 820Z" fill="#6c6763"/>
+<g class="wave"><path d="M270 870 Q170 790 100 655" stroke="#6c6763" stroke-width="80" fill="none" stroke-linecap="round"/>
+<circle cx="90" cy="645" r="62" fill="#6f6a66"/><ellipse cx="97" cy="662" rx="36" ry="30" fill="#c08678"/>
+<circle cx="45" cy="632" r="13" fill="#c08678"/><circle cx="78" cy="604" r="13" fill="#c08678"/><circle cx="113" cy="610" r="13" fill="#c08678"/></g>
+<path d="M262 775 Q440 920 592 805 L594 855 Q440 950 262 860Z" fill="#524e4b"/>
+<path d="M420 1035 C375 1005 370 945 400 940 C415 938 420 950 420 958 C420 950 428 938 442 940 C472 945 468 1005 420 1035Z" fill="#c97555"/>
+<path d="M465 1075 L460 1185 M575 1075 L572 1185" stroke="#5d5855" stroke-width="7" stroke-linecap="round"/>
+<path d="M280 88 Q215 110 195 330 Q192 390 225 415 L395 305 Q350 150 280 88Z" fill="#55524f"/>
+<path d="M283 140 Q250 190 235 300 Q228 360 245 395 Q300 350 332 300 Q325 200 283 140Z" fill="#967369"/>
+<path d="M830 205 Q850 215 845 300 Q835 450 745 530 L640 355 Q720 240 830 205Z" fill="#55524f"/>
+<path d="M815 255 Q790 270 755 330 Q735 400 740 480 Q790 440 820 380 Q830 310 815 255Z" fill="#967369"/>
+<circle cx="465" cy="568" r="270" fill="#6e6a65"/>
+<path d="M465 365 L448 395 M530 378 L540 412" stroke="#58544f" stroke-width="8" fill="none" stroke-linecap="round"/>
+<path d="M305 420 Q335 405 368 420 M605 470 Q635 462 665 482" stroke="#58544f" stroke-width="20" fill="none" stroke-linecap="round"/>
+<path d="M245 665 L255 715 M600 745 L606 790" stroke="#58544f" stroke-width="9" stroke-linecap="round"/>
+<path d="M462 545 L495 665 L395 650Z" fill="#8f997f" stroke="#8f997f" stroke-width="14" stroke-linejoin="round"/>
+<g class="blink"><circle cx="310" cy="520" r="62" fill="#7f8b7b"/><circle cx="615" cy="590" r="58" fill="#7f8b7b"/>
+<circle cx="318" cy="525" r="48" fill="#1b2024"/><circle cx="610" cy="595" r="48" fill="#1b2024"/>
+<circle cx="340" cy="518" r="13" fill="#fff"/><circle cx="628" cy="582" r="13" fill="#fff"/></g>
+<path d="M355 765 Q430 790 510 768 Q480 835 420 832 Q362 828 355 765Z" fill="#1b2024"/>
+<path d="M368 772 Q420 792 468 772 Q462 825 415 828 Q374 824 368 772Z" fill="#ea7a78"/>
+<ellipse cx="435" cy="690" rx="62" ry="42" fill="#151c22"/>
+<path d="M432 728 L432 772 M320 718 Q335 778 430 768 Q490 792 528 765" stroke="#151c22" stroke-width="12" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+<g class="badge"><circle cx="740" cy="965" r="145" fill="#dfd0b8"/><path d="M655 940 L705 940 L755 895 L755 1020 L705 985 L655 985Z" fill="#6b3f2a" stroke="#6b3f2a" stroke-width="8" stroke-linejoin="round"/><path d="M782 930 Q806 965 782 1000 M808 905 Q858 965 808 1025" stroke="#6b3f2a" stroke-width="14" fill="none" stroke-linecap="round"/></g>
+</svg></button></div>
   </div>
 
-  <div class="lang" role="group" aria-label="Idiomas">
-    <span id="from">Español</span>
-    <button id="swap" aria-label="Invertir idiomas">⇄</button>
-    <span id="to">Náhuatl</span>
-  </div>
+  <div class="lang" role="group" aria-label="Idioma"><button class="lg" data-l="nah" aria-pressed="true">Náhuatl</button><button class="lg" data-l="es" aria-pressed="false">Español</button></div>
+  <p class="note" id="draft"></p>
 
   <h2>Herramientas rápidas</h2>
   <div class="grid">
     <button class="tool t1" data-go="phrases"><i>🎙️</i>Frases de salud</button>
-    <button class="tool t2" data-soon><i>📷</i>Traducir con cámara</button>
-    <button class="tool t3" data-soon><i>💬</i>Asistente Corito</button>
+    <button class="tool t2" data-go="camera"><i>📷</i>Traducir con cámara</button>
+    <button class="tool t3" data-go="asist"><i>💬</i>Asistente Corito</button>
     <button class="tool t4" data-go="tramites"><i>📄</i>Trámites y salud</button>
   </div>
 
@@ -102,6 +141,7 @@ button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
 <section id="tramites" class="hide">
   <div class="hdr"><button class="back" data-go="home" aria-label="Volver">←</button><h1 style="font-size:26px">Trámites y salud</h1></div>
   <div id="docs"></div>
+  <button class="chip" data-go="phrases">Ir a frases para la consulta →</button>
   <p class="note">Lista de apoyo. Confirma requisitos con la clínica o en las fuentes oficiales. CORA no diagnostica ni sustituye al personal de salud.</p>
 </section>
 
@@ -111,9 +151,32 @@ button:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
   <p class="note">Toca una palabra para escucharla y verla en letra grande. Úsala junto con "Me duele..." para señalar dónde está el dolor.</p>
 </section>
 
+<section id="asist" class="hide">
+  <div class="hdr"><button class="back" data-go="home" aria-label="Volver">←</button><h1 style="font-size:26px">Corito te ayuda</h1></div>
+  <div class="bubble" style="max-width:none;margin-bottom:12px">Dime qué sientes o qué necesitas y te muestro cómo decirlo en náhuatl.</div>
+  <button class="tool t1" id="mic" style="width:100%;min-height:90px;flex-direction:row;align-items:center"><i>🎙️</i><span id="micl">Hablar</span></button>
+  <div style="display:flex;gap:8px;margin:12px 0"><input class="q" id="q" placeholder="O escribe aquí: me duele la cabeza" aria-label="Escribe tu mensaje"><button class="chip" id="go">Buscar</button></div>
+  <button class="chip" id="aiAsk" style="width:100%;margin-bottom:12px;font-size:17px"></button>
+  <div id="res"></div>
+  <p class="note">El micrófono necesita internet en la mayoría de teléfonos. Si no hay conexión, escribe tu mensaje o usa las frases guardadas.</p>
+</section>
+<section id="camera" class="hide">
+  <div class="hdr"><button class="back" data-go="home" aria-label="Volver">←</button><h1 style="font-size:26px">Cámara</h1></div>
+  <label class="tool t2" style="min-height:90px;flex-direction:row;align-items:center"><i>📷</i>Tomar foto de un documento<input type="file" accept="image/*" capture="environment" id="cam" hidden></label>
+  <div style="overflow:auto;margin-top:12px"><img id="shot" class="hide" alt="Foto del documento" style="width:100%;border-radius:16px"></div>
+  <button class="chip" id="aiPhoto" style="width:100%;margin-top:12px;font-size:18px"></button>
+  <div id="aiOut"></div>
+  <p class="note">Toca la foto para ampliarla.</p>
+</section>
+<section id="lesson" class="hide">
+  <div class="hdr"><button class="back" data-go="home" aria-label="Volver">←</button><h1 id="lt" style="font-size:22px"></h1></div>
+  <div id="lbody"></div>
+  <p class="note">Palabras en borrador: pueden cambiar cuando las valide un hablante.</p>
+</section>
+
 </main>
 
-<div id="big" role="dialog" aria-modal="true"><p id="bigEs"></p><small id="bigNah"></small><button id="bigClose">Cerrar</button></div>
+<div id="big" role="dialog" aria-modal="true"><p id="bigEs"></p><small id="bigNah"></small><small id="bigPr"></small><div class="brow"><button id="bigEsBtn">🔊 Español</button><button id="bigNahBtn">🔊 Náhuatl</button><button id="bigClose">Cerrar</button></div></div>
 <div id="toast" role="status"></div>
 
 <script>
@@ -149,6 +212,45 @@ const FRASES = {
   ]
 };
 
+/* ===== BORRADORES DE NÁHUATL =====
+   Basados en náhuatl clásico. NO están validados: la variante de tu comunidad
+   puede ser distinta. Cuando un hablante confirme una palabra, agrégala a
+   VALIDADOS con su texto y cambia el borrador; se mostrará sin la etiqueta. */
+const BORR = {
+  "Necesito ayuda":"Xinechpalehui",
+  "Hable más despacio, por favor":"Xitlahto ihuiyan, nimitztlatlauhtia",
+  "Necesito un intérprete":"Nicnequi ce nahuatlato",
+  "Tengo mucho tiempo con este dolor":"Huecauh nechcocoa",
+  "Quiero una consulta":"Nicnequi nicnotzaz ticitl",
+  "Vengo a una cita":"Nihualla, nechchia in ticitl",
+  "Estoy embarazada":"Nicpia conetl noitic",
+  "Vengo con mi hijo o hija":"Nihualla ica nopil",
+  "Soy alérgico o alérgica a un medicamento":"Ce pahtli amo cualli nechchihua",
+  "Es una emergencia":"Cenca ohuihcayotl",
+  "No puedo respirar":"Amo huel nihiyohuia",
+  "Identificación oficial (INE o equivalente)":"Notoca amatl, INE",
+  "CURP":"CURP",
+  "Cartilla de vacunación o de salud":"Pahtiliztli amatl",
+  "Receta o estudios anteriores, si los hay":"Pahtli amatl ihuan occequin amatl",
+  "Medicamentos que toma actualmente":"Pahtli tlen axcan niqui",
+  "Número de un familiar o contacto de confianza":"Tlapohualli ce nocnihuan",
+  "No entiendo":"Amo nicmati",
+  "Me duele la cabeza":"Nechcocoa notzontecon",
+  "Me duele el estómago":"Nechcocoa noxillan",
+  "Me duele aquí":"Nican nechcocoa",
+  "Tengo fiebre":"Nitotonia",
+  "Llamen a un médico":"Xicnotzacan ticitl",
+  "Cabeza":"Tzontecomatl","Ojos":"Ixtelolome","Oídos":"Nacazme","Nariz":"Yacatl",
+  "Boca":"Camactli","Dientes":"Tlantli","Cuello":"Quechtli","Brazo":"Mayolli",
+  "Mano":"Maitl","Pecho":"Elchiquiuhtli","Corazón":"Yollotl","Estómago":"Xillantli",
+  "Espalda":"Cuitlapantli","Pierna":"Metztli","Rodilla":"Tlancuaitl","Pie":"Icxitl","Sangre":"Eztli"
+};
+const VALIDADOS = {}; // ej. {"Me duele la cabeza":"texto confirmado por hablante"}
+Object.values(FRASES).flat().forEach(f => {
+  if (VALIDADOS[f.es]) { f.nah = VALIDADOS[f.es]; f.ok = true; }
+  else if (BORR[f.es]) { f.nah = BORR[f.es]; f.ok = false; }
+});
+
 const DOCS = [
   "Identificación oficial (INE o equivalente)",
   "CURP",
@@ -158,19 +260,52 @@ const DOCS = [
   "Número de un familiar o contacto de confianza"
 ];
 
-/* Palabras de la ruta de aprendizaje: también requieren validación */
-const NIVELES = [
-  {t:"Nivel 1: Saludos", p:100},
-  {t:"Nivel 2: Comunidad", p:45},
-  {t:"Nivel 3: Salud", p:0, lock:true}
-];
+
 
 /* ===== UI ===== */
 const $ = s => document.querySelector(s);
-let dirEsToNah = true, cat = "Ayuda";
+/* ===== IDIOMA DE LA APP =====
+   UI.nah es un BORRADOR: debe revisarlo un hablante. Si falta una clave, se muestra el español. */
+const UI = {
+ es:{tag:"Comunicación y Orientación Intercultural",tools:"Herramientas rápidas",path:"Ruta de aprendizaje",
+  t_phrases:"Frases de salud",t_camera:"Traducir con cámara",t_asist:"Asistente Corito",t_tramites:"Trámites y salud",t_vocab:"Vocabulario: partes del cuerpo",
+  h_body:"Partes del cuerpo",h_asist:"Corito te ayuda",h_camera:"Cámara",
+  a_intro:"Soy Corito. Dime qué sientes o qué necesitas, en español o en náhuatl, y te ayudo.",
+  mic:"Hablar",listening:"Escuchando…",ph:"Escribe aquí: me duele la cabeza",search:"Buscar",close:"Cerrar",b_es:"Español",b_nah:"Náhuatl",
+  photo:"Tomar foto de un documento",goPhr:"Ir a frases para la consulta →",
+  n_phr:"Toca la frase para mostrarla en letra grande. Toca 🔊 para escucharla.",
+  n_tra:"Lista de apoyo. Confirma requisitos con la clínica o en fuentes oficiales. CORA no diagnostica ni sustituye al personal de salud.",
+  n_voc:"Toca una palabra para escucharla y verla en letra grande.",
+  n_cam:"Toca la foto para ampliarla. Con IA puedes leerla y traducirla (necesita internet).",
+  n_asi:"El micrófono necesita internet en la mayoría de teléfonos. Sin conexión, escribe tu mensaje.",
+  n_les:"Palabras en borrador: pueden cambiar cuando las valide un hablante.",
+  offline:"Sin internet: CORA sigue funcionando con el contenido guardado.",
+  cat_Ayuda:"Ayuda",cat_Dolor:"Dolor",cat_Consulta:"Consulta",cat_Emergencia:"Emergencia",
+  lv1:"Nivel 1: Saludos",lv2:"Nivel 2: Cuerpo",lv3:"Nivel 3: Salud",learn:"Aprende",q:"¿Qué significa?",good:"¡Muy bien!",wrong:"Era: ",
+  done:"¡Terminaste!",back:"Volver al inicio",pr:"Se pronuncia:",draft:"Borrador",pending:"Por validar",
+  nofound:"Todavía no tengo esa frase. Prueba con: “Me duele la cabeza”, “Tengo fiebre” o “Necesito ayuda”.",
+  locked:"Completa el nivel anterior (60%)",lockedToast:"Completa antes el nivel anterior",draftnote:"",
+  ai_photo:"🐕 Corito, léeme esto",ai_ask:"🐕 Preguntarle a Corito",wait:"Corito está pensando…",aiwarn:"Corito usa inteligencia artificial: su traducción no está validada. No la uses para decisiones médicas; confirma con personal de salud o un intérprete.",
+  ainocfg:"La IA aún no está configurada.",ainet:"La IA necesita internet.",aierr:"No se pudo usar la IA. Intenta de nuevo.",takefirst:"Primero toma una foto.",typefirst:"Primero escribe o di algo.",
+  nomic:"Este navegador no puede escuchar. Escribe tu mensaje.",micperm:"Permite el micrófono en tu navegador. Si estás en la vista previa, abre CORA en su propio enlace.",nospeech:"No te escuché. Intenta otra vez.",micnet:"El micrófono necesita internet.",nomicdev:"No encuentro un micrófono.",micfail:"No pude usar el micrófono."},
+ nah:{tag:"Tlahtolli ihuan tlapalehuiliztli",tools:"Tequitl",path:"Tlamachtiliztli",
+  t_phrases:"Pahtiliztli tlahtolli",t_camera:"Ixiptli",t_asist:"Corito mitzpalehuia",t_tramites:"Amatl ihuan pahtiliztli",t_vocab:"Tonacayo tlahtolli",
+  h_body:"Tonacayo",h_asist:"Corito mitzpalehuia",h_camera:"Ixiptli",
+  a_intro:"Xicihcuilo noso xitlahto in tlen mitztequipachoa.",
+  mic:"Xitlahto",listening:"Nimitzcaqui…",ph:"Nican xihcuilo",search:"Xictemo",close:"Xictzacua",b_es:"Caxtillan",b_nah:"Nahuatl",
+  photo:"Xiccui ixiptli",goPhr:"→ Pahtiliztli tlahtolli",
+  cat_Ayuda:"Tlapalehuiliztli",cat_Dolor:"Cocoliztli",cat_Consulta:"Ticitl",cat_Emergencia:"¡Xinechpalehui!",
+  lv1:"Ce: Netlapaloliztli",lv2:"Ome: Tonacayo",lv3:"Yei: Pahtiliztli",learn:"Xomomachti",q:"¿Tlen quihtoznequi?",good:"¡Cualli!",wrong:"Amo. Quihtoznequi: ",
+  done:"¡Cualli!",back:"Xomocuepa",pr:"Quen mihtoa:",nofound:"Amo nicmati.",locked:"Achto xictlami in occe",
+  draftnote:"Borrador de la interfaz en náhuatl: falta revisión de un hablante. Los textos largos siguen en español.",
+  ai_photo:"🐕 Corito, xicpohua",ai_ask:"🐕 Corito, xinechpalehui",wait:"Xicchia…"}
+};
+let lang = "nah", dirEsToNah = false, cat = "Ayuda";
+try { const sv = localStorage.getItem("cora-lang"); if (sv === "es" || sv === "nah") { lang = sv; dirEsToNah = sv === "es"; } } catch(e) {}
+const t = k => (UI[lang] && UI[lang][k] != null) ? UI[lang][k] : UI.es[k];
 
 function show(id){
-  ["home","phrases","tramites","vocab"].forEach(x => $("#"+x).classList.toggle("hide", x!==id));
+  ["home","phrases","tramites","vocab","asist","camera","lesson"].forEach(x => $("#"+x).classList.toggle("hide", x!==id));
   window.scrollTo(0,0);
 }
 function toast(msg){
@@ -181,59 +316,67 @@ function toast(msg){
 document.querySelectorAll("[data-go]").forEach(b => b.onclick = () => show(b.dataset.go));
 document.querySelectorAll("[data-soon]").forEach(b => b.onclick = () => toast("Próximamente"));
 
-$("#swap").onclick = () => {
-  dirEsToNah = !dirEsToNah;
-  $("#from").textContent = dirEsToNah ? "Español" : "Náhuatl";
-  $("#to").textContent = dirEsToNah ? "Náhuatl" : "Español";
-};
 
-/* Ruta de aprendizaje */
-$("#path").innerHTML = NIVELES.map(n =>
-  `<div class="lvl ${n.p===100?"done":""} ${n.lock?"lock":""}">
-     <div style="font-size:26px">${n.lock?"🔒":n.p===100?"⭐":"🌱"}</div>
-     <b>${n.t}</b><small>${n.lock?"Bloqueado":n.p+"%"}</small>
-     <div class="bar"><div style="width:${n.p}%"></div></div>
-   </div>`).join("");
+
 
 /* Categorías y frases */
 function renderChips(){
   $("#chips").innerHTML = Object.keys(FRASES).map(c =>
-    `<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join("");
+    `<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${t("cat_"+c)}</button>`).join("");
   $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => { cat = b.dataset.c; renderChips(); renderList(); });
 }
 function renderList(){
-  $("#list").innerHTML = FRASES[cat].map((f,i) =>
-    `<div class="phrase">
-       <button class="main" data-i="${i}">
-         <b>${f.es}</b>
-         ${f.nah ? `<span>${f.nah}</span>` : `<span class="pend">Náhuatl pendiente de validar</span>`}
-       </button>
-       <button class="spk" data-s="${i}" aria-label="Escuchar: ${f.es}">🔊</button>
-     </div>`).join("");
-  $("#list").querySelectorAll(".main").forEach(b => b.onclick = () => openBig(FRASES[cat][b.dataset.i]));
-  $("#list").querySelectorAll(".spk").forEach(b => b.onclick = () => speak(FRASES[cat][b.dataset.s]));
+  const L = FRASES[cat];
+  $("#list").innerHTML = L.map((f,i) => cardHTML(f,i)).join("");
+  bindCards($("#list"), L);
 }
 
 /* Audio: usa la grabación del hablante si existe; si no, voz en español */
-function speak(f){
-  if (f.audio) { new Audio(f.audio).play().catch(()=>toast("No se encontró el audio")); return; }
+function say(text){
   if (!("speechSynthesis" in window)) return toast("Tu dispositivo no tiene voz");
   speechSynthesis.cancel();
-  const u = new SpeechSynthesisUtterance(f.es); u.lang = "es-MX"; u.rate = .9;
+  const u = new SpeechSynthesisUtterance(text); u.lang = "es-MX"; u.rate = .85;
   speechSynthesis.speak(u);
+}
+function speak(f){ say(f.es); }
+/* Náhuatl: usa la grabación del hablante si existe; si no, lee la pronunciación aproximada */
+function speakNah(f){
+  if (f.audio) { new Audio(f.audio).play().catch(()=>toast("No se encontró el audio")); return; }
+  if (!f.nah) return toast("Náhuatl pendiente de validar");
+  say(pron(f.nah)); toast("Pronunciación aproximada");
+}
+/* Escritura clásica -> cómo se lee para quien lee español */
+function pron(t){
+  return t.toLowerCase().replace(/ch/g,"§").replace(/qu/g,"k").replace(/hu/g,"w").replace(/uh\b/g,"w")
+    .replace(/x/g,"sh").replace(/tz/g,"ts").replace(/c(?=[ei])/g,"s").replace(/c/g,"k").replace(/§/g,"ch");
+}
+function cardHTML(f,i,force){
+  const nahMain = force ? (force === "nah" && f.nah) : (!dirEsToNah && f.nah);
+  const main = nahMain ? f.nah : f.es, sec = nahMain ? f.es : (f.nah || "");
+  const tag = f.nah ? (f.ok ? "" : `<span class="pend">${t("draft")}</span>`) : `<span class="pend">${t("pending")}</span>`;
+  const pr = f.nah ? `<span>${t("pr")} ${pron(f.nah)}</span>` : "";
+  return `<div class="phrase"><button class="main" data-i="${i}"><b>${main}</b>${sec?`<span>${sec}</span>`:""}${pr}${tag}</button><button class="spk" data-s="${i}" data-m="${nahMain?"n":"e"}" aria-label="🔊">🔊</button></div>`;
+}
+function bindCards(el,L){
+  el.querySelectorAll(".main").forEach(b => b.onclick = () => openBig(L[b.dataset.i]));
+  el.querySelectorAll(".spk").forEach(b => b.onclick = () => { const f = L[b.dataset.s]; b.dataset.m === "n" ? speakNah(f) : speak(f); });
 }
 function openBig(f){
   $("#bigEs").textContent = f.es;
-  $("#bigNah").textContent = f.nah || "";
-  $("#big").classList.add("on");
-  $("#bigClose").focus();
+  $("#bigNah").textContent = f.nah ? (f.ok ? f.nah : f.nah + " (borrador sin validar)") : "";
+  $("#bigPr").textContent = f.nah ? "Se pronuncia: " + pron(f.nah) : "";
+  $("#bigEsBtn").onclick = () => speak(f);
+  $("#bigNahBtn").onclick = () => speakNah(f);
+  $("#bigNahBtn").style.display = f.nah ? "" : "none";
+  $("#big").classList.add("on"); $("#bigClose").focus();
 }
 $("#bigClose").onclick = () => $("#big").classList.remove("on");
 
-/* Trámites */
-$("#docs").innerHTML = DOCS.map((d,i) =>
-  `<label class="phrase"><span class="main" style="display:flex;gap:12px;align-items:center">
-     <input type="checkbox" style="width:24px;height:24px"><b style="font-size:16px">${d}</b></span></label>`).join("");
+/* Trámites: siempre en español (para el personal) + náhuatl (para la persona) */
+const DOCITEMS = DOCS.map(d => ({es:d, nah:BORR[d]||null, ok:false}));
+function renderDocs(){ $("#docs").innerHTML = DOCITEMS.map((f,i) => cardHTML(f,i)).join(""); bindCards($("#docs"), DOCITEMS); }
+renderDocs();
+
 
 /* ===== VOCABULARIO: partes del cuerpo =====
    Igual que las frases: nah/audio se llenan cuando un hablante los valide. */
@@ -244,14 +387,19 @@ const VOCAB = [
   {ico:"✋",es:"Mano"},{ico:"🫁",es:"Pecho"},{ico:"❤️",es:"Corazón"},
   {ico:"🍽️",es:"Estómago"},{ico:"🔙",es:"Espalda"},{ico:"🦵",es:"Pierna"},
   {ico:"🦴",es:"Rodilla"},{ico:"🦶",es:"Pie"},{ico:"🩸",es:"Sangre"}
-].map(v => ({...v, nah:null, audio:null}));
-$("#vgrid").innerHTML = VOCAB.map((v,i) =>
-  `<button class="vc" data-v="${i}" aria-label="${v.es}"><i>${v.ico}</i>${v.es}${v.nah?`<small>${v.nah}</small>`:`<small>por validar</small>`}</button>`).join("");
-$("#vgrid").querySelectorAll(".vc").forEach(b => b.onclick = () => { const v = VOCAB[b.dataset.v]; speak(v); openBig(v); });
+].map(v => ({...v, nah:VALIDADOS[v.es]||BORR[v.es]||null, ok:!!VALIDADOS[v.es], audio:null}));
+function renderVocab(){
+  const nm = lang === "nah";
+  $("#vgrid").innerHTML = VOCAB.map((v,i) => {
+    const m = nm && v.nah ? v.nah : v.es, o = nm && v.nah ? v.es : (v.nah || "");
+    return `<button class="vc" data-v="${i}" aria-label="${v.es}"><i>${v.ico}</i>${m}<small>${o}</small>${v.nah?(v.ok?"":`<small>${t("draft")}</small>`):`<small>${t("pending")}</small>`}</button>`;
+  }).join("");
+  $("#vgrid").querySelectorAll(".vc").forEach(b => b.onclick = () => { const v = VOCAB[b.dataset.v]; (nm && v.nah) ? speakNah(v) : speak(v); openBig(v); });
+}
 
 /* ===== MODO SIN INTERNET ===== */
 function netState(){
-  $("#net").textContent = navigator.onLine ? "" : "Sin internet: CORA sigue funcionando con el contenido guardado.";
+  $("#net").textContent = navigator.onLine ? "" : t("offline");
 }
 addEventListener("online", netState); addEventListener("offline", netState); netState();
 try {
@@ -260,7 +408,236 @@ try {
   }
 } catch(e) {}
 
-renderChips(); renderList();
+/* ===== CORITO, el xoloitzcuintle ayudante ===== */
+/* Misma lista, mismo orden: al cambiar de idioma, Corito dice lo mismo en el otro idioma */
+const TIPS = {
+  es:["¡Hola! Soy Corito, tu xoloitzcuintle. ¿Cómo te ayudo hoy?","Habla. Te escucho.","Escribe lo que te preocupa.","En caso de emergencia, llama al 911.","¡Gracias!"],
+  nah:["¡Niltze! Nehuatl Corito. ¿Quen nimitzpalehuiz?","Xitlahto. Nimitzcaqui.","Xicihcuilo in tlen mitztequipachoa.","Ihcuac cenca ohuihcayotl, xicnotza 911.","¡Tlazohcamati!"]
+};
+let tipI = 0;
+function showTip(){ const a = TIPS[lang]; $("#tip").textContent = a[tipI % a.length]; }
+$("#corito").onclick = () => { tipI++; showTip(); const x = $("#tip").textContent; say(lang === "nah" ? pron(x) : x); };
+
+/* ===== RUTA DE APRENDIZAJE: primero enseña, luego pregunta =====
+   Si la app está en náhuatl, la persona aprende ESPAÑOL (con voz real en español).
+   Si está en español, aprende NÁHUATL. */
+const LEVELS = [
+  {items:[["Hola","Niltze"],["Gracias","Tlazohcamati"],["Buen día","Cualli tonalli"]]},
+  {items:VOCAB.filter(v=>v.nah).map(v=>[v.es,v.nah])},
+  {items:Object.values(FRASES).flat().filter(f=>f.nah).map(f=>[f.es,f.nah])}
+];
+let prog = {};
+try { prog = JSON.parse(localStorage.getItem("cora-prog") || "{}"); } catch(e) {}
+function saveProg(){ try { localStorage.setItem("cora-prog", JSON.stringify(prog)); } catch(e) {} }
+const pk = i => lang + i;
+const pct = i => Math.round(((prog[pk(i)]||[]).length / LEVELS[i].items.length) * 100);
+const open_ = i => i === 0 || pct(i-1) >= 60;
+function renderPath(){
+  $("#path").innerHTML = LEVELS.map((n,i) =>
+    `<button class="lvl ${pct(i)===100?"done":""} ${open_(i)?"":"lock"}" data-l="${i}">
+       <div style="font-size:26px">${!open_(i)?"🔒":pct(i)===100?"⭐":"🌱"}</div>
+       <b>${t("lv"+(i+1))}</b><small>${open_(i)?pct(i)+"%":t("locked")}</small>
+       <div class="bar"><div style="width:${pct(i)}%"></div></div></button>`).join("");
+  $("#path").querySelectorAll(".lvl").forEach(b => b.onclick = () => open_(+b.dataset.l) ? startLesson(+b.dataset.l) : toast(t("lockedToast")));
+}
+function startLesson(i){
+  const L = LEVELS[i], nm = lang === "nah", shuf = a => a.slice().sort(() => Math.random() - .5);
+  let q = L.items.filter(it => !(prog[pk(i)]||[]).includes(it[0]));
+  if (!q.length) q = L.items.slice();
+  q = shuf(q); let n = 0, ok = 0, phase = "teach";
+  $("#lt").textContent = t("lv"+(i+1)); show("lesson");
+  const sound = it => nm ? say(it[0]) : speakNah({nah:it[1]});
+  function teach(){
+    if (n >= q.length){ n = 0; phase = "quiz"; q = shuf(q); return quiz(); }
+    const it = q[n];
+    $("#lbody").innerHTML = `<h2>${t("learn")} ${n+1}/${q.length}</h2><div class="phrase"><div class="main"><b style="font-size:30px">${nm?it[0]:it[1]}</b><span style="font-size:20px">${nm?it[1]:it[0]}</span>${nm?"":`<span>${t("pr")} ${pron(it[1])}</span>`}</div><button class="spk" id="lsp" aria-label="🔊">🔊</button></div><button class="chip" id="nx" style="width:100%;font-size:22px">→</button>`;
+    $("#lsp").onclick = () => sound(it);
+    $("#nx").onclick = () => { n++; teach(); };
+    sound(it);
+  }
+  function quiz(){
+    if (n >= q.length){
+      $("#lbody").innerHTML = `<h2>${t("done")}</h2><p class="note">${ok} / ${q.length}</p><button class="chip" id="lback">${t("back")}</button>`;
+      $("#lback").onclick = () => { renderPath(); show("home"); }; return;
+    }
+    const it = q[n], ans = nm ? it[1] : it[0], qs = nm ? it[0] : it[1], pos = nm ? 1 : 0;
+    const opts = shuf(shuf(L.items.map(x=>x[pos]).filter(x=>x!==ans)).slice(0,2).concat(ans));
+    $("#lbody").innerHTML = `<div class="phrase"><div class="main"><b style="font-size:28px">${qs}</b></div><button class="spk" id="lsp" aria-label="🔊">🔊</button></div><h2>${t("q")}</h2>` +
+      opts.map((o,k) => `<button class="chip opt" style="display:block;width:100%;margin-bottom:10px;font-size:17px" data-k="${k}">${o}</button>`).join("");
+    $("#lsp").onclick = () => sound(it);
+    $("#lbody").querySelectorAll(".opt").forEach(b => b.onclick = () => {
+      if (opts[b.dataset.k] === ans){ ok++; (prog[pk(i)] = prog[pk(i)] || []); if (!prog[pk(i)].includes(it[0])) prog[pk(i)].push(it[0]); saveProg(); toast(t("good")); }
+      else toast(t("wrong") + ans);
+      n++; setTimeout(quiz, 800);
+    });
+  }
+  teach();
+}
+
+/* ===== CORITO: hablar o escribir -> mostrar cómo decirlo ===== */
+const DB = [...Object.values(FRASES).flat(), ...VOCAB];
+const norm = t => t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z\s]/g," ");
+const SYN = {panza:"estomago", calentura:"fiebre", doctor:"medico", doctora:"medico", ayudame:"ayuda", respirar:"respirar"};
+const STOP = ["a","el","la","los","las","un","una","de","mi","me","en","que","y","por","favor","es","con","al"];
+const toks = t => norm(t).split(/\s+/).filter(w => w.length > 1 && !STOP.includes(w)).map(w => SYN[w] || w);
+const same = (a,b) => a === b || (a.length >= 4 && b.length >= 4 && a.slice(0,5) === b.slice(0,5));
+let found = [];
+function find(text){
+  const T = toks(text), sc = txt => toks(txt).filter(w => T.some(x => same(x,w))).length;
+  found = DB.map(f => { const a = sc(f.es), b = f.nah ? sc(f.nah) : 0; return {f,a,b,s:Math.max(a,b)}; })
+            .filter(x => x.s > 0).sort((x,y) => y.s - x.s).slice(0,3);
+  if (!found.length){
+    if ((AI_ENDPOINT || _sample) && navigator.onLine && text.trim()) { $("#aiAsk").click(); return; }
+    $("#res").innerHTML = `<p class="note">${t("nofound")}</p>`; return;
+  }
+  /* Si escribiste en náhuatl -> responde en español grande; si escribiste en español -> náhuatl grande */
+  $("#res").innerHTML = found.map((x,i) => cardHTML(x.f, i, x.b > x.a ? "es" : "nah")).join("");
+  bindCards($("#res"), found.map(x => x.f));
+}
+$("#go").onclick = () => find($("#q").value);
+$("#q").addEventListener("keydown", e => { if (e.key === "Enter") find($("#q").value); });
+const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+let rec = null, listening = false;
+function startMic(){
+  if (listening && rec) { try { rec.stop(); } catch(e) {} return; }   /* tocar otra vez = terminar */
+  if (!SR) return toast(t("nomic"));
+  rec = new SR(); rec.lang = "es-MX"; rec.interimResults = true; rec.maxAlternatives = 1;
+  let finalText = "";
+  rec.onstart = () => { listening = true; $("#micl").textContent = t("listening"); $("#mic").classList.add("rec"); };
+  rec.onend = () => { listening = false; $("#micl").textContent = t("mic"); $("#mic").classList.remove("rec"); if (finalText.trim()) find(finalText); };
+  rec.onerror = e => {
+    const c = e.error;
+    toast(c === "not-allowed" || c === "service-not-allowed" ? t("micperm") : c === "no-speech" ? t("nospeech") : c === "network" ? t("micnet") : c === "audio-capture" ? t("nomicdev") : t("micfail"));
+  };
+  rec.onresult = e => {
+    let txt = ""; for (let i = 0; i < e.results.length; i++) txt += e.results[i][0].transcript;
+    $("#q").value = txt;
+    if (e.results[e.results.length - 1].isFinal) finalText = txt;
+  };
+  try { rec.start(); } catch(e) { toast(t("micfail")); }
+}
+$("#mic").onclick = startMic;
+
+/* ===== CÁMARA ===== */
+let lastPhoto = null;
+$("#cam").onchange = e => {
+  const f = e.target.files[0]; if (!f) return; lastPhoto = f;
+  const img = $("#shot"); img.src = URL.createObjectURL(f); img.classList.remove("hide"); img.style.width = "100%";
+  $("#aiOut").innerHTML = "";
+};
+$("#shot").onclick = () => { const im = $("#shot"); im.style.width = im.style.width === "100%" ? "220%" : "100%"; };
+
+/* ===== IA (opcional, necesita internet) =====
+   La llave de la IA NUNCA va en la app. Se usa un puente (Worker) que la guarda en secreto.
+   Pega aquí la URL de tu Worker, por ejemplo "https://cora-ia.TU-USUARIO.workers.dev" */
+const AI_ENDPOINT = "";
+const esc = x => String(x).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const AI_SYSTEM = `Eres Corito, un xoloitzcuintle amable y paciente, ayudante de CORA: una app para personas que hablan náhuatl y usan servicios de salud en México. Usa palabras sencillas.
+Responde SOLO con JSON válido, sin texto extra ni bloques de código: {"es":"...","nah":"..."}
+- SIEMPRE llena los dos campos: "es" en español y "nah" en náhuatl (náhuatl clásico, frases cortas y sencillas). No dejes "nah" vacío: da tu mejor traducción; la app ya avisa que no está validada.
+- FOTO de un documento: léela; en "es" explica en español muy sencillo (frases cortas, máximo 8 líneas) qué es y qué hay que hacer, y en "nah" da esa misma explicación en náhuatl (máximo 4 líneas, lo más importante).
+- TEXTO en español: "es" es el texto en español claro y "nah" su traducción al náhuatl.
+- TEXTO en náhuatl: "es" es su traducción al español y "nah" es el texto original.
+- Nunca inventes datos que no estén en el texto o la foto.
+- No diagnostiques ni recomiendes medicamentos ni dosis. Si hay una emergencia, di en "es": "En caso de emergencia, llama al 911." y en "nah": "Ihcuac cenca ohuihcayotl, xicnotza 911."`;
+let _sample;
+async function getSample(){
+  if (_sample !== undefined) return _sample;
+  try { _sample = (window.claude && claude.use) ? await claude.use("sample") : null; } catch(e) { _sample = null; }
+  return _sample;
+}
+function b64Blob(b64){
+  const bin = atob(b64), u = new Uint8Array(bin.length);
+  for (let i = 0; i < bin.length; i++) u[i] = bin.charCodeAt(i);
+  return new Blob([u], {type:"image/jpeg"});
+}
+async function askAI(payload){
+  /* Camino 1: Claude del propio visitante (funciona en el enlace de claude.ai, sin llaves) */
+  const sm = await getSample();
+  if (sm) {
+    try {
+      const isPhoto = payload.mode === "photo";
+      const input = AI_SYSTEM + "\n\n" + (isPhoto ? "Explica este documento (da \"es\" y \"nah\")." : "Texto: " + payload.text);
+      const opts = {modelTier:"quick"};
+      if (isPhoto) opts.images = [b64Blob(payload.image)];
+      const v = await sm.json(input, opts);
+      return {es:String(v.es||""), nah:String(v.nah||"")};
+    } catch(e) {
+      if (e && e.code === "not_granted") { toast(t("aierr")); return null; }
+      /* si falla, intenta el camino 2 */
+    }
+  }
+  /* Camino 2: tu Worker (para la versión en GitHub) */
+  if (!AI_ENDPOINT){ toast(t("ainocfg")); return null; }
+  if (!navigator.onLine){ toast(t("ainet")); return null; }
+  try {
+    const r = await fetch(AI_ENDPOINT, {method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(payload)});
+    if (!r.ok) throw new Error(r.status);
+    return await r.json();
+  } catch(e){ toast(t("aierr")); return null; }
+}
+function photoB64(file){
+  return new Promise((res,rej) => {
+    const img = new Image();
+    img.onload = () => {
+      const k = Math.min(1, 1280 / Math.max(img.width, img.height)), c = document.createElement("canvas");
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
+      c.getContext("2d").drawImage(img, 0, 0, c.width, c.height);
+      res(c.toDataURL("image/jpeg", .7).split(",")[1]);
+    };
+    img.onerror = rej; img.src = URL.createObjectURL(file);
+  });
+}
+function showAI(el, r){
+  let blocks = [["es", r.es], ["nah", r.nah]].filter(b => b[1]);
+  if (lang === "nah") blocks.reverse();
+  const face = `<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px"><div style="width:44px">${$("#corito").innerHTML.replace('viewBox="0 60 900 1150"', 'viewBox="150 60 720 800"').replace(/<g class="badge">.*?<\/g>/s, '')}</div><b>Corito</b></div>`;
+  el.innerHTML = face + blocks.map(([k,v],i) =>
+    `<div class="phrase"><div class="main"><span>${k==="es"?"Español":"Náhuatl"}</span><b style="font-weight:700;font-size:17px;white-space:pre-wrap">${esc(v)}</b></div><button class="spk" data-i="${i}" aria-label="🔊">🔊</button></div>`).join("") +
+    `<span class="pend">Corito (IA)</span><p class="note">${t("aiwarn")}</p>`;
+  el.querySelectorAll(".spk").forEach(b => b.onclick = () => { const [k,v] = blocks[b.dataset.i]; say(k === "nah" ? pron(v) : v); });
+}
+$("#aiPhoto").onclick = async () => {
+  if (!lastPhoto) return toast(t("takefirst"));
+  $("#aiOut").innerHTML = `<p class="note">${t("wait")}</p>`;
+  let r = null;
+  try { r = await askAI({mode:"photo", image: await photoB64(lastPhoto), mediaType:"image/jpeg"}); } catch(e) { toast(t("aierr")); }
+  $("#aiOut").innerHTML = ""; if (r) showAI($("#aiOut"), r);
+};
+$("#aiAsk").onclick = async () => {
+  const x = $("#q").value.trim(); if (!x) return toast(t("typefirst"));
+  $("#res").innerHTML = `<p class="note">${t("wait")}</p>`;
+  const r = await askAI({mode:"translate", text:x.slice(0,500)});
+  $("#res").innerHTML = ""; if (r) showAI($("#res"), r);
+};
+
+/* ===== CAMBIO DE IDIOMA ===== */
+function setTxt(el, txt){
+  const n = [...el.childNodes].find(c => c.nodeType === 3 && c.textContent.trim());
+  if (n) n.nodeValue = txt; else el.textContent = txt;
+}
+const MAP = [[".top p","tag"],["#home h2:first-of-type","tools"],["#home h2:last-of-type","path"],
+  [".tool[data-go=phrases]","t_phrases"],[".tool[data-go=camera]","t_camera"],[".tool[data-go=asist]","t_asist"],
+  [".tool[data-go=tramites]","t_tramites"],[".tool[data-go=vocab]","t_vocab"],
+  ["#phrases h1","t_phrases"],["#tramites h1","t_tramites"],["#vocab h1","h_body"],["#asist h1","h_asist"],["#camera h1","h_camera"],
+  ["#asist .bubble","a_intro"],["#go","search"],["#aiPhoto","ai_photo"],["#aiAsk","ai_ask"],["#bigClose","close"],["#camera label","photo"],["#tramites .chip","goPhr"],
+  ["#phrases .note","n_phr"],["#tramites .note","n_tra"],["#vocab .note","n_voc"],["#camera .note","n_cam"],["#asist .note","n_asi"],["#lesson .note","n_les"]];
+function applyLang(){
+  MAP.forEach(([sel,k]) => { const el = document.querySelector(sel); if (el) setTxt(el, t(k)); });
+  $("#bigEsBtn").textContent = "🔊 " + t("b_es"); $("#bigNahBtn").textContent = "🔊 " + t("b_nah");
+  $("#q").placeholder = t("ph"); $("#micl").textContent = t("mic");
+  $("#draft").textContent = t("draftnote"); $("#draft").classList.toggle("hide", !t("draftnote"));
+  $("#res").innerHTML = "";
+  renderChips(); renderList(); renderDocs(); renderVocab(); renderPath(); showTip(); netState();
+}
+function setLang(l){
+  lang = l; dirEsToNah = l === "es";
+  try { localStorage.setItem("cora-lang", l); } catch(e) {}
+  document.querySelectorAll(".lg").forEach(b => b.setAttribute("aria-pressed", b.dataset.l === l));
+  applyLang();
+}
+document.querySelectorAll(".lg").forEach(b => b.onclick = () => setLang(b.dataset.l));
+setLang(lang);
 </script>
 </body>
 </html>

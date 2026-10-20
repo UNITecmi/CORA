@@ -1,7 +1,7 @@
 // Service worker de CORA: guarda la app y los audios para usarla sin internet.
 // Al agregar audios nuevos, súbelos a la carpeta audio/nah/, anótalos en AUDIOS
 // y cambia la versión (CACHE) para que los teléfonos descarguen la actualización.
-const CACHE = "cora-v1";
+const CACHE = "cora-v11";
 const AUDIOS = [
   // "audio/nah/duele-cabeza.mp3",
 ];
