@@ -3,13 +3,14 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<link rel="apple-touch-icon" href="icon-192.png">
 <title>CORA</title>
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#c8664a">
+<meta name="theme-color" content="#0f857d">
 <link rel="icon" href="icon.svg">
 <script src="config.js"></script>
 <style>
-:root{--bg:#f1f8f6;--card:#ffffff;--ink:#17323a;--mute:#5f7b80;--line:#d3e6e2;--terra:#f26a5d;--teal:#13a89e;--mustard:#f3b63f;--char:#555;--green:#5b8f68;
+:root{--bg:#f1f8f6;--card:#ffffff;--ink:#17323a;--mute:#5f7b80;--line:#d3e6e2;--terra:#d04639;--teal:#0f857d;--mustard:#f3b63f;--char:#555;--green:#5b8f68;
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#10242a;--card:#183139;--ink:#eaf6f3;--mute:#9bb8b4;--line:#27474f}}
 :root[data-theme="dark"]{--bg:#10242a;--card:#183139;--ink:#eaf6f3;--mute:#9bb8b4;--line:#27474f}
@@ -102,6 +103,8 @@ details.set summary{font-weight:800;cursor:pointer}details.set p{margin:8px 0 0}
 #tour{display:none;position:fixed;inset:0;z-index:60}
 #tspot{position:absolute;border-radius:14px;box-shadow:0 0 0 9999px rgba(10,30,36,.76);pointer-events:none;transition:all .25s}
 #tcard{position:absolute;left:16px;right:16px;max-width:448px;margin:0 auto;background:var(--card);color:var(--ink);border-radius:18px;padding:16px;box-shadow:0 8px 30px rgba(0,0,0,.3)}
+a.chip{text-decoration:none;color:inherit;display:inline-block;text-align:center}
+html.pict .vt i,html.pict .vc i{font-size:46px}
 </style>
 </head>
 <body>
@@ -210,8 +213,8 @@ details.set summary{font-weight:800;cursor:pointer}details.set p{margin:8px 0 0}
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
     <button class="vt" style="background:var(--terra)" data-go="phrases"><i>🩺</i>Salud</button>
     <button class="vt" style="background:#2f7d6b" data-go="tramites"><i>📄</i>Trámites</button>
-    <button class="vt" style="background:#8e7cd6" data-soon="1"><i>🎓</i>Educación</button>
-    <button class="vt" style="background:var(--mustard);color:#2d2112" data-soon="1"><i>👥</i>Comunidad</button>
+    <button class="vt" style="background:#8e7cd6" data-cat="Embarazo"><i>🤰</i>Embarazo y bebés</button>
+    <button class="vt" style="background:var(--mustard);color:#2d2112" data-cat="Medicinas"><i>💊</i>Medicinas</button>
   </div>
   <button class="unit" data-go="tramites" style="margin-top:12px;background:#ece8fb;border-color:#d9d2f5"><span class="uc" style="border-color:#8e7cd6;color:#8e7cd6">🛡</span><span class="ut">Guías rápidas<br><small>Consejos para tu consulta</small></span></button>
   <button class="unit" data-go="vocab"><span class="uc">🫀</span><span class="ut">Partes del cuerpo</span></button>
@@ -304,6 +307,12 @@ const FRASES = {
   ]
 };
 
+/* Categorías de salud nuevas (náhuatl pendiente de validar por un hablante) */
+const _n = a => a.map(es => ({es, nah:null, audio:null}));
+Object.assign(FRASES, {
+  "Embarazo": _n(["Estoy embarazada","Tengo contracciones","Tengo sangrado","Mi bebé no se mueve","Quiero una consulta de embarazo","Mi bebé tiene fiebre","Mi bebé no quiere comer","Necesito la vacuna de mi bebé"]),
+  "Medicinas": _n(["Necesito una medicina","¿Cuántas veces la tomo al día?","¿Es para niños?","¿Puedo tomarla con comida?","Esta medicina me cae mal","Se me acabó mi medicina","¿Dónde compro esta medicina?","Soy alérgico a una medicina"])
+});
 /* ===== BORRADORES DE NÁHUATL =====
    Basados en náhuatl clásico. NO están validados: la variante de tu comunidad
    puede ser distinta. Cuando un hablante confirme una palabra, agrégala a
@@ -372,7 +381,7 @@ const UI = {
   n_asi:"El micrófono necesita internet en la mayoría de teléfonos. Sin conexión, escribe tu mensaje.",
   n_les:"Palabras en borrador: pueden cambiar cuando las valide un hablante.",
   offline:"Sin internet: CORA sigue funcionando con el contenido guardado.",
-  cat_Ayuda:"Ayuda",cat_Dolor:"Dolor",cat_Consulta:"Consulta",cat_Emergencia:"Emergencia",
+  cat_Ayuda:"Ayuda",cat_Dolor:"Dolor",cat_Consulta:"Consulta",cat_Emergencia:"Emergencia",cat_Embarazo:"Embarazo y bebés",cat_Medicinas:"Medicinas",
   lv1:"Nivel 1: Saludos",lv2:"Nivel 2: Cuerpo",lv3:"Nivel 3: Salud",learn:"Aprende",q:"¿Qué significa?",good:"¡Muy bien!",wrong:"Era: ",
   done:"¡Terminaste!",back:"Volver al inicio",pr:"Se pronuncia:",draft:"Borrador",pending:"Por validar",
   nofound:"Todavía no tengo esa frase. Prueba con: “Me duele la cabeza”, “Tengo fiebre” o “Necesito ayuda”.",
@@ -396,13 +405,22 @@ let lang = "nah", dirEsToNah = false, cat = "Ayuda";
 try { const sv = localStorage.getItem("cora-lang"); if (sv === "es" || sv === "nah") { lang = sv; dirEsToNah = sv === "es"; } } catch(e) {}
 const t = k => (UI[lang] && UI[lang][k] != null) ? UI[lang][k] : UI.es[k];
 
+let CUR = null, GOBACK = false; const NAVH = [];
+function goBack(){
+  const prev = NAVH.pop();
+  if (!prev && !localStorage.getItem("cora-onb")) return;
+  GOBACK = true; show(prev || "home"); GOBACK = false;
+}
 function show(id){
+  if (CUR && CUR !== id && !GOBACK) { NAVH.push(CUR); if (NAVH.length > 40) NAVH.shift(); }
+  CUR = id;
   document.querySelectorAll("main > section").forEach(x => x.classList.toggle("hide", x.id !== id));
-  const TAB = {quick:"comm",detail:"comm",asist:"comm",phrases:"comm",favs:"more",help:"more",priv:"more",info:"more",ajustes:"more",settings:"more",access:"more",lesson:"learn",vocab:"learn",tramites:"tramites"};
+  const TAB = {quick:"comm",detail:"comm",asist:"comm",phrases:"comm",favs:"more",help:"more",priv:"more",info:"more",ajustes:"more",settings:"more",access:"more",clinics:"more",lesson:"learn",vocab:"learn",tramites:"tramites"};
   $("#nav").classList.toggle("hide", ["login","welcome"].includes(id) || (["lang","variant","access","dl"].includes(id) && !localStorage.getItem("cora-onb")));
   document.querySelectorAll("#nav button").forEach(b => b.setAttribute("aria-current", b.dataset.go === (TAB[id] || id)));
   if (id==="learn") renderLearn(); if (id==="quick") renderQuick(); if (id==="favs") renderFavs(); if (id==="home") renderLast();
   window.scrollTo(0,0);
+  if (typeof S !== "undefined" && S.a && S.a.nav) setTimeout(() => { const s = document.getElementById(id), x = s && s.querySelector("h1,h2"); if (x && x.textContent.trim()) say(x.textContent.trim()); }, 200);
 }
 function toast(msg){
   const t = $("#toast"); t.textContent = msg; t.classList.add("on");
@@ -418,7 +436,7 @@ document.querySelectorAll("[data-soon]").forEach(b => b.onclick = () => toast("P
 /* Categorías y frases */
 function renderChips(){
   $("#chips").innerHTML = Object.keys(FRASES).map(c =>
-    `<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${t("cat_"+c)}</button>`).join("");
+    `<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${PICON() ? (CATICO[c] || "") + " " : ""}${t("cat_"+c)}</button>`).join("");
   $("#chips").querySelectorAll(".chip").forEach(b => b.onclick = () => { cat = b.dataset.c; renderChips(); renderList(); });
 }
 function renderList(){
@@ -446,18 +464,25 @@ function pron(t){
   return t.toLowerCase().replace(/ch/g,"§").replace(/qu/g,"k").replace(/hu/g,"w").replace(/uh\b/g,"w")
     .replace(/x/g,"sh").replace(/tz/g,"ts").replace(/c(?=[ei])/g,"s").replace(/c/g,"k").replace(/§/g,"ch");
 }
+const PICS = [[/emergencia|911|ambulancia/i,"🆘"],[/respirar/i,"😮‍💨"],[/fiebre/i,"🌡️"],[/embaraz|contracci/i,"🤰"],[/vacuna/i,"💉"],[/sangr/i,"🩸"],[/al[eé]rg/i,"⚠️"],[/medicin|medicament|pastilla/i,"💊"],[/est[oó]mago|panza|vientre/i,"🤢"],[/cabeza/i,"🤕"],[/dolor|duele|duelen/i,"🤕"],[/beb[eé]/i,"👶"],[/m[eé]dico|doctor/i,"🧑‍⚕️"],[/int[eé]rprete/i,"🗣️"],[/despacio/i,"🐢"],[/no entiendo/i,"❓"],[/ayuda/i,"🙋"],[/cita|consulta/i,"📅"],[/comida|comer|tomo|veces/i,"🍽️"],[/compro|farmacia|d[oó]nde/i,"📍"],[/ni[ñn]os/i,"🧒"],[/agua/i,"💧"],[/ba[ñn]o/i,"🚻"],[/identificaci[oó]n|\bINE\b|CURP/i,"🪪"],[/cartilla/i,"📒"],[/receta/i,"📝"],[/estudios|an[aá]lisis/i,"🧪"],[/tel[eé]fono|contacto|familiar/i,"📞"],[/gracias/i,"🙏"],[/hola|buen d[ií]a/i,"👋"],[/acab[oó]/i,"❌"]];
+const CATICO = {Ayuda:"🙋",Dolor:"🤕",Consulta:"🧑‍⚕️",Emergencia:"🆘",Embarazo:"🤰",Medicinas:"💊"};
+function pic(es){ if (!es) return ""; for (const [r,e] of PICS) if (r.test(es)) return e; return ""; }
+const PICON = () => { try { return !!(S.a && S.a.pict); } catch(e) { return false; } };
+const VOICEON = () => { try { return !!(S.a && S.a.voice); } catch(e) { return false; } };
 function cardHTML(f,i,force){
   const nahMain = force ? (force === "nah" && f.nah) : (!dirEsToNah && f.nah);
   const main = nahMain ? f.nah : f.es, sec = nahMain ? f.es : (f.nah || "");
   const tag = f.nah ? (f.ok ? "" : `<span class="pend">${t("draft")}</span>`) : `<span class="pend">${t("pending")}</span>`;
   const pr = f.nah ? `<span>${t("pr")} ${pron(f.nah)}</span>` : "";
-  return `<div class="phrase"><button class="main" data-i="${i}"><b>${main}</b>${sec?`<span>${sec}</span>`:""}${pr}${tag}</button><button class="spk" data-s="${i}" data-m="${nahMain?"n":"e"}" aria-label="🔊">🔊</button></div>`;
+  return `<div class="phrase"><button class="main" data-i="${i}">${PICON() && pic(f.es) ? `<span style="font-size:40px;display:block;line-height:1.1">${pic(f.es)}</span>` : ""}<b>${main}</b>${sec?`<span>${sec}</span>`:""}${pr}${tag}</button><button class="spk" data-s="${i}" data-m="${nahMain?"n":"e"}" aria-label="🔊">🔊</button></div>`;
 }
 function bindCards(el,L){
-  el.querySelectorAll(".main").forEach(b => b.onclick = () => openBig(L[b.dataset.i]));
+  el.querySelectorAll(".main").forEach(b => b.onclick = () => { const f = L[b.dataset.i]; openBig(f); if (VOICEON()) speak(f); });
   el.querySelectorAll(".spk").forEach(b => b.onclick = () => { const f = L[b.dataset.s]; b.dataset.m === "n" ? speakNah(f) : speak(f); });
 }
 function openBig(f){
+  let ic = $("#bigIc"); if (!ic) { ic = document.createElement("div"); ic.id = "bigIc"; ic.style.cssText = "font-size:90px;line-height:1;margin-bottom:10px"; $("#big").insertBefore(ic, $("#bigEs")); }
+  ic.textContent = (PICON() && (f.ico || pic(f.es))) || "";
   $("#bigEs").textContent = f.es;
   $("#bigNah").textContent = f.nah ? (f.ok ? f.nah : f.nah + " (borrador sin validar)") : "";
   $("#bigPr").textContent = f.nah ? "Se pronuncia: " + pron(f.nah) : "";
@@ -553,7 +578,7 @@ function startLesson(i){
   function teach(){
     if (n >= q.length){ n = 0; phase = "quiz"; q = shuf(q); return quiz(); }
     const it = q[n];
-    $("#lbody").innerHTML = `<h2>${t("learn")} ${n+1}/${q.length}</h2><div class="phrase"><div class="main"><b style="font-size:30px">${nm?it[0]:it[1]}</b><span style="font-size:20px">${nm?it[1]:it[0]}</span>${nm?"":`<span>${t("pr")} ${pron(it[1])}</span>`}</div><button class="spk" id="lsp" aria-label="🔊">🔊</button></div><button class="chip" id="nx" style="width:100%;font-size:22px">→</button>`;
+    $("#lbody").innerHTML = `<h2>${t("learn")} ${n+1}/${q.length}</h2><div class="phrase"><div class="main">${PICON() && pic(it[0]) ? `<span style="font-size:56px;display:block">${pic(it[0])}</span>` : ""}<b style="font-size:30px">${nm?it[0]:it[1]}</b><span style="font-size:20px">${nm?it[1]:it[0]}</span>${nm?"":`<span>${t("pr")} ${pron(it[1])}</span>`}</div><button class="spk" id="lsp" aria-label="🔊">🔊</button></div><button class="chip" id="nx" style="width:100%;font-size:22px">→</button>`;
     $("#lsp").onclick = () => sound(it);
     $("#nx").onclick = () => { n++; teach(); };
     sound(it);
@@ -596,6 +621,7 @@ function find(text){
   /* Si escribiste en náhuatl -> responde en español grande; si escribiste en español -> náhuatl grande */
   $("#res").innerHTML = found.map((x,i) => cardHTML(x.f, i, x.b > x.a ? "es" : "nah")).join("");
   bindCards($("#res"), found.map(x => x.f));
+  if (VOICEON() && found[0]) speak(found[0].f);
 }
 $("#go").onclick = () => find($("#q").value);
 $("#q").addEventListener("keydown", e => { if (e.key === "Enter") find($("#q").value); });
@@ -707,6 +733,7 @@ function showAI(el, r){
     `<div class="phrase"><div class="main"><span>${k==="es"?"Español":"Náhuatl"}</span><b style="font-weight:700;font-size:17px;white-space:pre-wrap">${esc(v)}</b></div><button class="spk" data-i="${i}" aria-label="🔊">🔊</button></div>`).join("") +
     `<span class="pend">Corito (IA)</span><p class="note">${t("aiwarn")}</p>`;
   el.querySelectorAll(".spk").forEach(b => b.onclick = () => { const [k,v] = blocks[b.dataset.i]; say(k === "nah" ? pron(v) : v); });
+  if (VOICEON()) { const e = blocks.find(b => b[0] === "es"); if (e) say(e[1]); }
 }
 $("#aiPhoto").onclick = async () => {
   if (!lastPhoto) return toast(t("takefirst"));
@@ -754,7 +781,7 @@ function jset(k, v){ try { localStorage.setItem(k, JSON.stringify(v)); } catch(e
 const DEF = {fs:1, rate:.85, theme:"auto"};
 const S = Object.assign({}, DEF, jget("cora-set", {}));
 function applyS(){
-  document.documentElement.style.setProperty("--fs", S.fs); document.documentElement.classList.toggle("hc", !!(S.a && S.a.hc));
+  document.documentElement.style.setProperty("--fs", S.fs); document.documentElement.classList.toggle("hc", !!(S.a && S.a.hc)); document.documentElement.classList.toggle("pict", !!(S.a && S.a.pict));
   if (S.theme === "auto") delete document.documentElement.dataset.theme; else document.documentElement.dataset.theme = S.theme;
   $("#fs").value = S.fs; $("#fsV").textContent = Math.round(S.fs*100) + "%";
   $("#rt").value = S.rate; $("#rtV").textContent = S.rate.toFixed(2) + "×";
@@ -832,14 +859,50 @@ mk("variant", hd("Selecciona la variante de náhuatl") + `<p class="note" style=
 $("#vSamp").onclick = () => speakNah({nah:"Niltze"});
 
 const AC = [["big","Texto grande","🔠"],["hc","Contraste alto","◐"],["voice","Audio y lectura en voz alta","🔊"],["pict","Pictogramas","🖼️"],["nav","Navegación con audio","🎧"]];
-mk("access", hd("¿Cómo te gustaría usar CORA?") + `<p class="note" style="text-align:left">Puedes cambiar estas opciones más tarde desde Ajustes.</p>` +
+mk("access", hd("¿Cómo te gustaría usar CORA?") + `<p class="note" style="text-align:left">Puedes cambiar estas opciones más tarde desde Ajustes. <b>Navegación con audio:</b> Corito lee en voz alta el título de cada pantalla; mantén presionado un botón para escuchar su nombre sin activarlo. <b>Audio y lectura:</b> CORA lee sola cada frase que abres o buscas, y también las respuestas de Corito. <b>Pictogramas:</b> muestra un dibujo grande junto a cada frase, categoría y documento.</p>` +
   AC.map(a => `<label class="unit"><span style="font-size:22px">${a[2]}</span><span class="ut">${a[1]}</span><input type="checkbox" data-a="${a[0]}" style="width:22px;height:22px;accent-color:var(--teal)"></label>`).join("") + nb("aNext","Continuar","home"));
 S.a = S.a || {};
-document.querySelectorAll("[data-a]").forEach(c => { c.checked = !!S.a[c.dataset.a]; c.onchange = () => { S.a[c.dataset.a] = c.checked; if (c.dataset.a === "big") S.fs = c.checked ? 1.25 : 1; jset("cora-set", S); applyS(); }; });
+document.querySelectorAll("[data-a]").forEach(c => { c.checked = !!S.a[c.dataset.a]; c.onchange = () => { S.a[c.dataset.a] = c.checked; if (c.dataset.a === "big") S.fs = c.checked ? 1.25 : 1; jset("cora-set", S); applyS(); renderChips(); renderList(); renderDocs(); }; });
 
 $("#aNext").onclick = () => { try { localStorage.setItem("cora-onb", "1"); } catch(e) {} show("home"); maybeTour(); };
 
-mk("more", hd("Más herramientas") + row("👥","Voces de la comunidad","Palabras, historias y grabaciones","soon") + row("❤️","Favoritos e historial","Tus frases guardadas","favs") + row("♿","Accesibilidad","Ajustes visuales y de audio","access") + row("⚙️","Ajustes","Idioma, privacidad y ayuda","ajustes"));
+mk("more", hd("Más herramientas") + row("🗺️","Clínicas cerca de mí","Mapa y cómo llegar","clinics") + row("👥","Voces de la comunidad","Palabras, historias y grabaciones","soon") + row("❤️","Favoritos e historial","Tus frases guardadas","favs") + row("♿","Accesibilidad","Ajustes visuales y de audio","access") + row("⚙️","Ajustes","Idioma, privacidad y ayuda","ajustes"));
+
+mk("clinics", hd("Clínicas cerca de mí","more") + `<p class="note" style="text-align:left">CORA usa tu ubicación solo cuando tocas el botón y no la guarda. Necesita internet. Si es una emergencia, llama al 911.</p>
+  <div class="seg" id="clT"><button class="chip" data-ty="salud" aria-pressed="true">🏥 Clínicas y hospitales</button><button class="chip" data-ty="farm" aria-pressed="false">💊 Farmacias</button></div>
+  <button class="tool t1" id="clGo" style="width:100%;min-height:56px;border-radius:30px;justify-content:center;align-items:center;font-size:18px;margin:12px 0">📍 Buscar cerca de mí</button>
+  <iframe id="clMap" class="hide" title="Mapa" style="width:100%;height:230px;border:0;border-radius:16px;margin-bottom:10px" loading="lazy"></iframe>
+  <div id="clList"></div>`);
+let clTy = "salud";
+$("#clT").querySelectorAll(".chip").forEach(b => b.onclick = () => { clTy = b.dataset.ty; $("#clT").querySelectorAll(".chip").forEach(x => x.setAttribute("aria-pressed", x === b)); });
+const hav = (a,b,c,d) => { const R = 6371, r = x => x*Math.PI/180, p = r(c-a), q = r(d-b), k = Math.sin(p/2)**2 + Math.cos(r(a))*Math.cos(r(c))*Math.sin(q/2)**2; return 2*R*Math.asin(Math.sqrt(k)); };
+function setMap(la,lo){ const f = $("#clMap"); f.src = `https://www.openstreetmap.org/export/embed.html?bbox=${lo-.012},${la-.007},${lo+.012},${la+.007}&layer=mapnik&marker=${la},${lo}`; f.classList.remove("hide"); }
+function clList(la,lo,L){
+  const lab = clTy === "farm" ? "farmacia" : "clínica";
+  $("#clList").innerHTML = (L.length ? L.map((e,i) => `<div class="set"><b>${esc(e.n)}</b><p class="note" style="text-align:left;margin:4px 0">${e.km.toFixed(1)} km${e.ph ? " · 📞 " + esc(e.ph) : ""}</p><div class="seg"><button class="chip" data-m="${i}">🗺️ Ver en el mapa</button><a class="chip" target="_blank" rel="noopener" href="https://www.google.com/maps/dir/?api=1&destination=${e.y},${e.x}">➡️ Cómo llegar</a>${e.ph ? `<a class="chip" href="tel:${esc(e.ph.replace(/[^+\d]/g,""))}">📞 Llamar</a>` : ""}</div></div>`).join("") : `<p class="note">No encontré lugares cercanos en el mapa.</p>`) +
+    `<a class="chip" style="display:block;margin-top:8px" target="_blank" rel="noopener" href="https://www.google.com/maps/search/${encodeURIComponent(lab)}/@${la},${lo},14z">Buscar también en Google Maps</a>`;
+  $("#clList").querySelectorAll("[data-m]").forEach(b => b.onclick = () => { const e = L[+b.dataset.m]; setMap(e.y, e.x); });
+}
+async function findClinics(){
+  if (!navigator.geolocation) { $("#clList").innerHTML = '<p class="note">Tu teléfono no permite usar la ubicación.</p>'; return; }
+  $("#clList").innerHTML = '<p class="note">Buscando tu ubicación…</p>';
+  navigator.geolocation.getCurrentPosition(async pos => {
+    const la = pos.coords.latitude, lo = pos.coords.longitude; setMap(la,lo);
+    $("#clList").innerHTML = '<p class="note">Buscando lugares cerca…</p>';
+    const f = clTy === "farm" ? '["amenity"="pharmacy"]' : '["amenity"~"^(clinic|hospital|doctors)$"]';
+    const q = `[out:json][timeout:20];(node${f}(around:6000,${la},${lo});way${f}(around:6000,${la},${lo}););out center 40;`;
+    try {
+      const r = await fetch("https://overpass-api.de/api/interpreter", {method:"POST", headers:{"Content-Type":"application/x-www-form-urlencoded"}, body:"data=" + encodeURIComponent(q)});
+      if (!r.ok) throw new Error(r.status);
+      const d = await r.json();
+      const L = (d.elements || []).map(e => { const y = e.lat ?? (e.center && e.center.lat), x = e.lon ?? (e.center && e.center.lon), g = e.tags || {};
+        return {n:g.name || g.operator || (clTy === "farm" ? "Farmacia" : "Clínica"), y, x, ph:g.phone || g["contact:phone"] || "", km:hav(la,lo,y,x)}; })
+        .filter(e => e.y != null && e.x != null).sort((a,b) => a.km - b.km).slice(0,8);
+      clList(la,lo,L);
+    } catch(e) { clList(la,lo,[]); toast("No pude cargar la lista. Usa el botón de Google Maps."); }
+  }, () => { $("#clList").innerHTML = '<p class="note">No pude obtener tu ubicación. Revisa el permiso de ubicación y tu internet.</p>'; }, {enableHighAccuracy:true, timeout:15000, maximumAge:60000});
+}
+$("#clGo").onclick = findClinics;
 
 const qr = "qr";
 mk("comm", hd("¿Cómo quieres comunicarte?") +
@@ -850,17 +913,17 @@ $("#cVoice").onclick = () => { show("asist"); const m = $("#mic"); if (m) m.clic
 mk("quick", hd("Frases rápidas") + `<div id="qTabs" style="display:flex;gap:8px;overflow-x:auto;margin-bottom:12px"></div><div id="qGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px"></div>`);
 function renderQuick(){
   const K = Object.keys(FRASES); qcat = qcat || K[0];
-  $("#qTabs").innerHTML = K.map(c => `<button class="chip" aria-pressed="${c===qcat}" data-c="${c}">${t("cat_"+c)}</button>`).join("");
+  $("#qTabs").innerHTML = K.map(c => `<button class="chip" aria-pressed="${c===qcat}" data-c="${c}">${PICON() ? (CATICO[c] || "") + " " : ""}${t("cat_"+c)}</button>`).join("");
   $("#qTabs").querySelectorAll(".chip").forEach(b => b.onclick = () => { qcat = b.dataset.c; renderQuick(); });
   const C = ["#c9bdf6","#f8d27a","#a8e6df","#ffd7b0"], E = ["🙋","🆘","💧","🚻","✅","❌","🩺","💊"];
-  $("#qGrid").innerHTML = FRASES[qcat].map((f,i) => `<button class="vt" style="background:${C[i%4]};color:#2b2340" data-q="${i}"><i>${E[i%8]}</i>${f.es}</button>`).join("");
+  $("#qGrid").innerHTML = FRASES[qcat].map((f,i) => `<button class="vt" style="background:${C[i%4]};color:#2b2340" data-q="${i}"><i>${pic(f.es) || E[i%8]}</i>${f.es}</button>`).join("");
   $("#qGrid").querySelectorAll(".vt").forEach(b => b.onclick = () => openDetail(FRASES[qcat][+b.dataset.q]));
 }
 mk("detail", "");
 function openDetail(f){
   HIS = [f.es, ...HIS.filter(x => x !== f.es)].slice(0,8); jset("cora-his", HIS);
   const fav = () => FAV.includes(f.es);
-  $("#detail").innerHTML = hd(f.es, "quick") + `<div class="set"><div class="seg"><button class="chip" id="dN">▶ Náhuatl</button><button class="chip" id="dE">🔊 Español</button></div>
+  $("#detail").innerHTML = hd(f.es, "quick") + (PICON() && pic(f.es) ? `<div style="font-size:72px;text-align:center">${pic(f.es)}</div>` : "") + `<div class="set"><div class="seg"><button class="chip" id="dN">▶ Náhuatl</button><button class="chip" id="dE">🔊 Español</button></div>
     <p style="margin-top:12px"><b>En náhuatl:</b><br>${f.nah || "Pendiente de validar"}</p><p><b>Variante:</b><br>Náhuatl de la Huasteca</p>
     <p>${f.ok ? "✓ Validada por hablantes nativos" : "⚠ Borrador: pendiente de validar"}</p></div>
     <button class="tool t1" id="dBig" style="width:100%;min-height:52px;border-radius:30px;justify-content:center;align-items:center;font-size:18px">Mostrar en pantalla grande</button>
@@ -870,9 +933,10 @@ function openDetail(f){
   $("#dN").onclick = () => speakNah(f); $("#dE").onclick = () => speak(f); $("#dBig").onclick = () => openBig(f);
   $("#dFav").onclick = () => { FAV = fav() ? FAV.filter(x => x !== f.es) : [...FAV, f.es]; jset("cora-fav", FAV); paint(); };
   show("detail");
+  if (VOICEON()) speak(f);
 }
 mk("favs", hd("Favoritos e historial") + `<h2 style="text-align:left">Favoritos</h2><div id="fvL"></div><h2 style="text-align:left">Historial</h2><div id="hsL"></div>`);
-const listBtns = (a, el) => { el.innerHTML = a.length ? a.map((x,i) => `<button class="unit" data-i="${i}"><span class="ut">${x}</span><span>›</span></button>`).join("") : '<p class="note">Aún no hay frases.</p>';
+const listBtns = (a, el) => { el.innerHTML = a.length ? a.map((x,i) => `<button class="unit" data-i="${i}"><span class="ut">${esc(x)}</span><span>›</span></button>`).join("") : '<p class="note">Aún no hay frases.</p>';
   el.querySelectorAll(".unit").forEach(b => b.onclick = () => { const f = ALL().find(y => y.es === a[+b.dataset.i]); if (f) openDetail(f); }); };
 function renderFavs(){ listBtns(FAV, $("#fvL")); listBtns(HIS, $("#hsL")); }
 function renderLast(){ listBtns(HIS.slice(0,3), $("#last")); }
@@ -894,6 +958,7 @@ const PRIV = [
  ["📱 Qué se guarda en tu teléfono","Tu nombre, un PIN protegido, tus ajustes, tu avance, favoritos e historial. Todo queda solo en este teléfono; CORA no tiene cuentas en internet."],
  ["🎙️ Micrófono","Solo se usa cuando tocas el botón de hablar. En muchos teléfonos el reconocimiento de voz lo procesa un servicio del navegador o del sistema."],
  ["📷 Cámara y fotos","Solo se usa cuando tú tomas una foto. La foto se envía a la IA únicamente si tocas “Corito, léeme esto”."],
+ ["📍 Ubicación","Solo se usa cuando tocas “Buscar cerca de mí”. Se envía a un servicio de mapas (OpenStreetMap) para buscar lugares cercanos y no se guarda en CORA."],
  ["🤖 IA","Si la IA está activada, el texto o la foto que envías viaja a un servicio externo para responderte. No envíes datos de pacientes reales con servicios gratuitos."],
  ["🗑️ Tus datos","Puedes borrar tu perfil, avance y ajustes cuando quieras."]];
 mk("priv", hd("Privacidad y permisos","ajustes") + PRIV.map(q => `<div class="set"><b>${q[0]}</b><p>${q[1]}</p></div>`).join("") + `<button class="chip" id="pWipe" style="width:100%">Borrar mis datos de este teléfono</button>`);
@@ -939,8 +1004,10 @@ function tourStep(){
     $("#tspot").style.cssText = `left:${r.left-6}px;top:${r.top-6}px;width:${r.width+12}px;height:${r.height+12}px`;
     $("#tn").textContent = (ti+1) + " de " + TOUR.length; $("#tt").innerHTML = st.t + '<br><small style="color:var(--teal)">' + TNAH[ti][0] + "</small>"; $("#tx").innerHTML = st.x + '<br><small><b>Náhuatl (borrador):</b></small><br>' + TNAH[ti][1];
     $("#tnext").textContent = ti === TOUR.length-1 ? "Listo" : "Siguiente";
-    c.style.top = below ? Math.min(r.bottom+16, innerHeight-340) + "px" : "auto";
-    c.style.bottom = below ? "auto" : (innerHeight - r.top + 16) + "px";
+    c.style.maxHeight = "46vh"; c.style.overflowY = "auto"; c.style.bottom = "auto";
+    const ch = c.offsetHeight, gap = 14, spB = innerHeight - r.bottom - gap, spA = r.top - gap;
+    let top = spB >= ch ? r.bottom + gap : spA >= ch ? r.top - gap - ch : ((r.top + r.height/2) < innerHeight/2 ? innerHeight - ch - 8 : 8);
+    c.style.top = Math.max(8, Math.min(top, innerHeight - ch - 8)) + "px";
   }, 80);
 }
 function endTour(){ $("#tour").style.display = "none"; try { localStorage.setItem("cora-tour", "1"); } catch(e) {} show("home"); }
@@ -953,6 +1020,27 @@ mk("info", hd("Información de CORA","ajustes") + `<div style="text-align:center
   ["Importante","CORA no sustituye la atención médica ni a un intérprete profesional. En caso de emergencia, llama al 911."],
   ["Versión","Prototipo 0.24. Funciona en el navegador y se puede instalar como app."]].map(q => `<div class="set"><b>${q[0]}</b><p>${q[1]}</p></div>`).join(""));
 
+
+document.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { cat = b.dataset.cat; qcat = cat; renderChips(); renderList(); show("phrases"); });
+const _lt = document.querySelector("#home .tool[data-go=learn]");
+if (_lt && _lt.parentElement) _lt.parentElement.insertAdjacentHTML("afterend", '<button class="tool t5" id="hClin" style="width:100%;margin-top:12px;min-height:60px;flex-direction:row;align-items:center;justify-content:center;font-size:18px"><i>🗺️</i>Clínicas cerca de mí</button>');
+if ($("#hClin")) $("#hClin").onclick = () => show("clinics");
+/* Flecha de regreso en todas las pantallas que no la tienen */
+document.querySelectorAll("main > section").forEach(s => {
+  if (["home","welcome","login"].includes(s.id) || s.querySelector(".back")) return;
+  const b = document.createElement("button"); b.className = "back"; b.textContent = "←"; b.setAttribute("aria-label","Volver"); b.onclick = goBack;
+  const hdr = s.querySelector(".hdr");
+  if (hdr) hdr.prepend(b); else { const d = document.createElement("div"); d.className = "hdr"; d.appendChild(b); s.prepend(d); }
+});
+/* Navegación con audio: mantener presionado = escuchar el nombre del botón */
+let _lp = null, _lpDone = false;
+const _navOn = () => typeof S !== "undefined" && S.a && S.a.nav;
+const _txt = el => (el.getAttribute("aria-label") || el.innerText || "").replace(/\s+/g," ").trim();
+document.addEventListener("touchstart", e => { if (!_navOn()) return; const b = e.target.closest("button,.unit,.vt,.tool,a,summary"); if (!b) return;
+  _lp = setTimeout(() => { _lpDone = true; say(_txt(b)); if (navigator.vibrate) navigator.vibrate(30); }, 550); }, {passive:true});
+["touchend","touchmove","touchcancel"].forEach(ev => document.addEventListener(ev, () => clearTimeout(_lp), {passive:true}));
+document.addEventListener("click", e => { if (_lpDone) { e.preventDefault(); e.stopPropagation(); _lpDone = false; } }, true);
+document.addEventListener("focusin", e => { if (_navOn() && e.target.matches("button,a,input,select,summary")) say(_txt(e.target)); });
 
 show("welcome");
 $("#wDog").innerHTML = $("#corito").innerHTML.replace(/<g class="badge">.*?<\/g>/s, "");
