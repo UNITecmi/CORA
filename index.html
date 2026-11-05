@@ -151,7 +151,7 @@ html.pict .vt i,html.pict .vc i{font-size:46px}
     <button class="tool t1" data-go="comm"><i>🎙️</i>Comunicarme</button>
     <button class="tool t2" data-go="camera"><i>📷</i>Traducir con cámara</button>
     <button class="tool t3" data-go="quick"><i>💬</i>Frases rápidas</button>
-    <button class="tool t4" data-go="learn"><i>📖</i>Aprender náhuatl</button>
+    <button class="tool t4" data-go="learn"><i>📖</i>Lecciones: aprender y leer</button>
   </div>
 
   <button class="tool t5" data-go="vocab" style="width:100%;margin-top:12px;min-height:72px;flex-direction:row;align-items:center"><i>🫀</i>Vocabulario: partes del cuerpo</button>
@@ -418,7 +418,7 @@ function show(id){
   const TAB = {quick:"comm",detail:"comm",asist:"comm",phrases:"comm",favs:"more",help:"more",priv:"more",info:"more",ajustes:"more",settings:"more",access:"more",clinics:"more",lesson:"learn",vocab:"learn",tramites:"tramites"};
   $("#nav").classList.toggle("hide", ["login","welcome"].includes(id) || (["lang","variant","access","dl"].includes(id) && !localStorage.getItem("cora-onb")));
   document.querySelectorAll("#nav button").forEach(b => b.setAttribute("aria-current", b.dataset.go === (TAB[id] || id)));
-  if (id==="learn") renderLearn(); if (id==="quick") renderQuick(); if (id==="favs") renderFavs(); if (id==="home") renderLast();
+  if (id==="learn") renderLearn(); if (id==="quick") renderQuick(); if (id==="favs") renderFavs(); if (id==="home") { renderLast(); renderPath(); }
   window.scrollTo(0,0);
   if (typeof S !== "undefined" && S.a && S.a.nav) setTimeout(() => { const s = document.getElementById(id), x = s && s.querySelector("h1,h2"); if (x && x.textContent.trim()) say(x.textContent.trim()); }, 200);
 }
@@ -969,7 +969,7 @@ const TOUR = [
  {g:"home", s:".tool[data-go=comm]", t:"Comunicarme", x:"Escribe, elige una frase o usa tu voz para hacerte entender en la clínica."},
  {g:"home", s:".tool[data-go=camera]", t:"Traducir con cámara", x:"Toma una foto de un documento para verlo más grande y, con IA, entenderlo."},
  {g:"home", s:".tool[data-go=quick]", t:"Frases rápidas", x:"Cuadros con frases comunes de salud. Toca uno para escucharlo."},
- {g:"home", s:".tool[data-go=learn]", t:"Aprender náhuatl", x:"Lecciones cortas con avance por niveles."},
+ {g:"home", s:".tool[data-go=learn]", t:"Lecciones", x:"Lecciones con dibujos y voz para aprender español, náhuatl y a leer y escribir."},
  {g:"comm", s:"#nav [data-go=comm]", t:"Comunicar", x:"Todas las formas de comunicarte: escribir, elegir una frase o hablar."},
  {g:"learn", s:"#nav [data-go=learn]", t:"Aprender", x:"Tu ruta de aprendizaje y el vocabulario por temas."},
  {g:"tramites", s:"#nav [data-go=tramites]", t:"Servicios", x:"Qué llevar a tu cita: documentos y consejos."},
@@ -1014,11 +1014,11 @@ function endTour(){ $("#tour").style.display = "none"; try { localStorage.setIte
 function maybeTour(){ if (!localStorage.getItem("cora-tour")) setTimeout(startTour, 500); }
 
 mk("info", hd("Información de CORA","ajustes") + `<div style="text-align:center;margin-bottom:12px"><img src="${LOGO}" alt="CORA" style="height:110px"><p style="margin:6px 0 0;color:var(--teal);font-weight:800;line-height:1.35">Comunicación · Orientación<br>Respeto · Autonomía</p><p style="margin:8px 0 0"><b>Tu voz, tu idioma, tu autonomía.</b></p></div>` +
- [["¿Qué es CORA?","Una app para ayudar a personas hablantes de náhuatl a comunicarse y orientarse en servicios de salud en México, con frases, lecciones, trámites y un asistente."],
+ [["¿Qué es CORA?","Una app para que las personas hablantes de náhuatl aprendan, se comuniquen y se orienten, también en servicios de salud: lecciones con voz y dibujos (sin necesidad de leer), alfabetización en náhuatl y español, frases, trámites y un asistente."],
   ["Variante de náhuatl","La variante objetivo es el náhuatl de la Huasteca (San Luis Potosí, Veracruz, Hidalgo y Puebla). Los textos en náhuatl son borradores y todavía los debe validar un hablante nativo."],
   ["Fuentes previstas","Gran Diccionario Náhuatl (UNAM), el corpus Axolotl / py-elotl y vocabularios de la Huasteca. Aún no hay datos cargados de esas fuentes."],
   ["Importante","CORA no sustituye la atención médica ni a un intérprete profesional. En caso de emergencia, llama al 911."],
-  ["Versión","Prototipo 0.24. Funciona en el navegador y se puede instalar como app."]].map(q => `<div class="set"><b>${q[0]}</b><p>${q[1]}</p></div>`).join(""));
+  ["Versión","Prototipo 0.25 (con curso de lecciones). Funciona en el navegador y se puede instalar como app."]].map(q => `<div class="set"><b>${q[0]}</b><p>${q[1]}</p></div>`).join(""));
 
 
 document.querySelectorAll("[data-cat]").forEach(b => b.onclick = () => { cat = b.dataset.cat; qcat = cat; renderChips(); renderList(); show("phrases"); });
@@ -1047,5 +1047,7 @@ $("#wDog").innerHTML = $("#corito").innerHTML.replace(/<g class="badge">.*?<\/g>
 $("#wHave").onclick = () => { renderLogin(); show("login"); };
 $("#wGo").onclick = () => { if (localStorage.getItem("cora-sess")) enter(); else { renderLogin(); show("login"); } };
 </script>
+<script src="curso.js"></script>
+<script src="idioma.js"></script>
 </body>
 </html>
